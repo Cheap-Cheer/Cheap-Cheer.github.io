@@ -1,0 +1,35 @@
+:root {
+  color-scheme: light;
+  --paper: #f1f3fb;
+  --ink: #212643;
+  --muted: #4e5573;
+  --accent: #3845a0;
+  --line: #c8cee8;
+  --surface: #fafaff;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.8 Inter, system-ui, sans-serif; }
+.wrap { width: min(100% - 2.5rem, 62rem); margin-inline: auto; }
+a { color: var(--accent); text-underline-offset: .25em; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+header { border-bottom: 1px solid var(--line); }
+.masthead, .section-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem 2rem; }
+.masthead { padding-block: 1.25rem; }
+nav { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; }
+.masthead a { text-decoration: none; font-weight: 650; }
+.masthead a:hover, .masthead [aria-current] { text-decoration: underline; }
+.intro { padding-block: clamp(3rem, 9vw, 6rem) clamp(2rem, 5vw, 3rem); }
+h1 { margin: 0; font: clamp(2.75rem, 8vw, 5rem)/1.15 "Songti SC", Georgia, serif; }
+.intro p, #journal-status, .metadata { color: var(--muted); }
+.intro p { margin-bottom: 0; }
+.section-head { border-bottom: 1px solid var(--line); padding-bottom: .75rem; }
+h2 { margin: 0; font-size: 1.15rem; }
+#journal-records { display: grid; gap: 1rem; list-style: none; padding: 0; }
+article { background: var(--surface); border-inline-start: 4px solid var(--accent); padding: 1.25rem clamp(1rem, 4vw, 2rem); overflow-wrap: anywhere; }
+h3 { margin: 0; font-size: 1.55rem; }
+.metadata { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.5rem; margin-block: .5rem 0; }
+.stars { color: var(--accent); letter-spacing: .12em; font-size: 1.2rem; }
+h4 { margin-block: 1rem .25rem; }
+.review { white-space: pre-wrap; margin: 0; }
+footer { margin-top: clamp(3rem, 8vw, 6rem); border-top: 1px solid var(--line); padding-block: 1.25rem; color: var(--muted); font-size: .9rem; }
