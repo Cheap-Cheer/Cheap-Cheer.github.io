@@ -9,18 +9,20 @@ export function byNewest(a, b) {
   return b.date.localeCompare(a.date);
 }
 
-function isRecord(record) {
-  return typeof record?.title === "string" && record.title.trim()
+function isRecord(record, key) {
+  const readable = typeof record?.title === "string" && record.title.trim()
     && typeof record.date === "string" && datePattern.test(record.date)
-    && Number.isInteger(record.rating) && record.rating >= 1 && record.rating <= 5
     && typeof record.review === "string";
+  if (!readable) return false;
+  if (key === "reading") return true;
+  return Number.isInteger(record.rating) && record.rating >= 1 && record.rating <= 5;
 }
 
 export async function loadRecords(key) {
   const response = await fetch(`${key}.json`);
   if (!response.ok) throw new Error("记录文件不可用");
   const { records } = await response.json();
-  return records.filter(isRecord).sort(byNewest);
+  return records.filter((record) => isRecord(record, key)).sort(byNewest);
 }
 
 export function countByYear(records) {

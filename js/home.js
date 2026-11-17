@@ -9,7 +9,7 @@ export async function renderHome() {
     const target = document.querySelector(`#${key} .cards`);
     try {
       const records = await loadRecords(key);
-      const cards = records.slice(0, homeLimit).map((record) => createCard(record, view.kind));
+      const cards = records.slice(0, homeLimit).map((record) => createCard(record, view.kind, 3));
       target.replaceChildren(...(cards.length ? cards : [element("p", "empty", view.empty)]));
     } catch {
       target.textContent = "暂时无法加载记录。";

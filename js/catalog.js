@@ -8,9 +8,10 @@ const sortOptions = [
   ["rating", "评分从高到低"],
 ];
 
-function buildSort(onChange) {
+function buildSort(kind, onChange) {
   const sort = element("select");
-  for (const [value, label] of sortOptions) {
+  const options = kind === "book" ? sortOptions.filter(([value]) => value !== "rating") : sortOptions;
+  for (const [value, label] of options) {
     const option = element("option", "", label);
     option.value = value;
     sort.append(option);
@@ -92,7 +93,7 @@ export function renderCatalog(root, key, records) {
     current = 1;
     draw();
   });
-  const { label: sortLabel, sort } = buildSort(() => {
+  const { label: sortLabel, sort } = buildSort(view.kind, () => {
     current = 1;
     draw();
   });
