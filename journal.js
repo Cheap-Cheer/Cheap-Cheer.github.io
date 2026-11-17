@@ -29,9 +29,17 @@ function doubanLink(record, kind) {
   });
 }
 
+function posterSource(record) {
+  if (typeof record.poster !== "string") return "";
+  if (/^https:\/\/[^/]+\.doubanio\.com\//.test(record.poster)) return record.poster;
+  if (/^posters\/[^/\\]+\.jpg$/.test(record.poster) && !record.poster.includes("..")) return record.poster;
+  return "";
+}
+
 function card(record, kind) {
   const article = element("article", `card ${kind} text-only`);
-  if (typeof record.poster === "string" && /^https:\/\/[^/]+\.doubanio\.com\//.test(record.poster)) {
+  const source = posterSource(record);
+  if (source) {
     const cover = element("div", "cover");
     const image = element("img");
     image.alt = "";
@@ -44,7 +52,7 @@ function card(record, kind) {
     cover.append(image);
     article.append(cover);
     article.classList.remove("text-only");
-    image.src = record.poster;
+    image.src = source;
   }
 
   const body = element("div");
@@ -107,7 +115,7 @@ function renderCatalog(key, records) {
   const count = element("span", "count");
   count.setAttribute("aria-live", "polite");
   heading.append(element("h1", "", view.name), count);
-  const grid = element("div", key === "reading" ? "catalog book-grid" : "catalog");
+  const grid = element("div", key === "reading" ? "catalog book-grid" : "catalog movie-grid");
   const pagination = element("nav", "pagination");
   pagination.setAttribute("aria-label", "分页");
   const edit = element("a", "edit", "在 GitHub 添加记录 ↗");
