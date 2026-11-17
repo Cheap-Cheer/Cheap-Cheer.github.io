@@ -1,12 +1,22 @@
-const { source, dateLabel, reviewLabel, empty } = document.body.dataset;
+const { source, dateLabel, reviewLabel, empty, doubanKind } = document.body.dataset;
 const statusMessage = document.querySelector("#journal-status");
 const list = document.querySelector("#journal-records");
 
-function renderRecord({ title, date, rating, review }) {
+function renderRecord({ title, date, rating, review, doubanId }) {
   const item = document.createElement("li");
   const article = document.createElement("article");
   const heading = document.createElement("h3");
-  heading.textContent = title;
+  const link = document.createElement("a");
+  link.textContent = title;
+
+  if (typeof doubanId === "string" && /^[0-9]+$/.test(doubanId)) {
+    link.href = `https://${doubanKind}.douban.com/subject/${doubanId}/`;
+  } else {
+    const category = doubanKind === "movie" ? "1002" : "1001";
+    const query = new URLSearchParams({ q: title, cat: category });
+    link.href = `https://www.douban.com/search?${query}`;
+  }
+  heading.append(link);
 
   const metadata = document.createElement("p");
   metadata.className = "metadata";
