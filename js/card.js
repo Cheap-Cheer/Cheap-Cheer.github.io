@@ -2,9 +2,10 @@ import { element } from "./dom.js";
 
 function dateText(date) {
   const [year, month, day] = date.split("-");
-  if (day) return date;
-  if (month) return `${year}年${Number(month)}月`;
-  return `${year}年`;
+  const parts = [year];
+  if (month) parts.push(month.padStart(2, "0"));
+  if (day) parts.push(day.padStart(2, "0"));
+  return parts.join("-");
 }
 
 function doubanLink(record, kind) {
@@ -61,27 +62,36 @@ function appendPoster(article, record) {
   image.src = source;
 }
 
-export function createCard(record, kind) {
+export function createCard(record, kind, headingLevel = 2) {
   const article = element("article", `card ${kind} text-only`);
   appendPoster(article, record);
 
-  const heading = element("h2");
+  const heading = element(headingLevel === 3 ? "h3" : "h2");
   const link = element("a", "", record.title);
   link.href = doubanLink(record, kind);
   heading.append(link);
   if (kind === "movie" && Number.isInteger(record.releaseYear)) {
     heading.append(" ", element("span", "year", String(record.releaseYear)));
   }
+  if (kind === "book" && Number.isInteger(record.publishYear)) {
+    heading.append(" ", element("span", "year", String(record.publishYear)));
+  }
 
   const date = element(record.date.length > 4 ? "time" : "span", "date", dateText(record.date));
   if (date.tagName === "TIME") date.dateTime = record.date;
 
-  const stars = element("span", "stars", "★".repeat(record.rating) + "☆".repeat(5 - record.rating));
-  stars.setAttribute("role", "img");
-  stars.setAttribute("aria-label", `评分 ${record.rating} 分，满分 5 分`);
-
   const body = element("div");
-  body.append(heading, date, stars);
+  body.append(heading);
+  if (kind === "book" && typeof record.author === "string" && record.author.trim()) {
+    body.append(element("p", "author", record.author.trim()));
+  }
+  body.append(date);
+  if (kind === "movie") {
+    const stars = element("span", "stars", "★".repeat(record.rating) + "☆".repeat(5 - record.rating));
+    stars.setAttribute("role", "img");
+    stars.setAttribute("aria-label", `评分 ${record.rating} 分，满分 5 分`);
+    body.append(stars);
+  }
   appendReview(body, record.review);
   article.append(body);
   return article;
