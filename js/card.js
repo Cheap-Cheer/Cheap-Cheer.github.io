@@ -23,24 +23,73 @@ function posterSource(record) {
   return "";
 }
 
-function reviewLength(review) {
-  return Array.from(review).length;
+function chevron() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M6 9l6 6 6-6");
+  svg.append(path);
+  return svg;
+}
+
+function reviewOverflows(preview) {
+  const width = preview.clientWidth;
+  if (!width) return false;
+  const probe = preview.cloneNode(true);
+  probe.hidden = false;
+  probe.classList.remove("clipped");
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.pointerEvents = "none";
+  probe.style.width = `${width}px`;
+  probe.style.margin = "0";
+  preview.parentElement.append(probe);
+  const fullHeight = probe.getBoundingClientRect().height;
+  probe.style.display = "-webkit-box";
+  probe.style.webkitLineClamp = "2";
+  probe.style.webkitBoxOrient = "vertical";
+  probe.style.overflow = "hidden";
+  const clampedHeight = probe.getBoundingClientRect().height;
+  probe.remove();
+  return fullHeight - clampedHeight > 1;
 }
 
 function appendReview(body, review) {
-  if (reviewLength(review) <= 38) {
-    body.append(element("p", "review", review));
-    return;
-  }
-
   const preview = element("p", "review clipped", review);
-  preview.setAttribute("aria-hidden", "true");
-  const details = element("details");
-  details.append(element("summary", "", "查看完整感想"), element("p", "review", review));
-  details.addEventListener("toggle", () => {
-    preview.hidden = details.open;
+  const button = element("button", "review-more");
+  button.type = "button";
+  button.hidden = true;
+  button.setAttribute("aria-expanded", "false");
+  button.setAttribute("aria-label", "展开感想");
+  button.append(chevron());
+  button.addEventListener("click", () => {
+    const open = button.getAttribute("aria-expanded") !== "true";
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "收起感想" : "展开感想");
+    preview.classList.toggle("clipped", !open);
   });
-  body.append(preview, details);
+  body.append(preview, button);
+
+  const update = () => {
+    if (!preview.isConnected) {
+      observer.disconnect();
+      return;
+    }
+    const overflow = reviewOverflows(preview);
+    const open = button.getAttribute("aria-expanded") === "true";
+    if (!overflow) {
+      preview.classList.remove("clipped");
+      button.hidden = true;
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "展开感想");
+      return;
+    }
+    button.hidden = false;
+    preview.classList.toggle("clipped", !open);
+  };
+  const observer = new ResizeObserver(update);
+  observer.observe(preview);
 }
 
 function appendPoster(article, record) {
