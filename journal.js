@@ -33,7 +33,8 @@ function renderRecord({ title, date, rating, review, doubanId, releaseYear }) {
   time.textContent = year + "年";
   if (month) time.textContent = `${year}年${Number(month)}月`;
   if (day) time.textContent = date;
-  dateField.append(dateLabel + " ", time);
+  if (dateLabel) dateField.append(dateLabel + " ");
+  dateField.append(time);
 
   const stars = document.createElement("span");
   stars.className = "stars";
@@ -42,12 +43,16 @@ function renderRecord({ title, date, rating, review, doubanId, releaseYear }) {
   stars.textContent = "★".repeat(rating) + "☆".repeat(5 - rating);
   metadata.append(dateField, stars);
 
-  const reviewHeading = document.createElement("h4");
-  reviewHeading.textContent = reviewLabel;
+  article.append(heading, metadata);
+  if (reviewLabel) {
+    const reviewHeading = document.createElement("h4");
+    reviewHeading.textContent = reviewLabel;
+    article.append(reviewHeading);
+  }
   const reviewText = document.createElement("p");
   reviewText.className = "review";
   reviewText.textContent = review;
-  article.append(heading, metadata, reviewHeading, reviewText);
+  article.append(reviewText);
   item.append(article);
   return item;
 }

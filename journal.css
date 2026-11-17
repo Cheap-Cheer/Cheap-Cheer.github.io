@@ -33,4 +33,9 @@ h3 { margin: 0; font-size: 1.55rem; }
 .stars { color: var(--accent); letter-spacing: .12em; font-size: 1.2rem; }
 h4 { margin-block: 1rem .25rem; }
 .review { white-space: pre-wrap; margin: 0; }
+[data-douban-kind="movie"] .review {
+  margin-top: 1rem;
+  color: #414141;
+  font-family: "Kaiti SC", KaiTi, STKaiti, "楷体", serif;
+}
 footer { margin-top: clamp(3rem, 8vw, 6rem); border-top: 1px solid var(--line); padding-block: 1.25rem; color: var(--muted); font-size: .9rem; }
