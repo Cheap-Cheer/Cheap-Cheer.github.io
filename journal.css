@@ -58,6 +58,10 @@ details .review{margin-top:.35rem}
 @media(max-width:43rem){.home{grid-template-columns:1fr}.home section+section::before{display:none}.top{height:4.4rem}}
 @media(max-width:31rem){.catalog{grid-template-columns:1fr}.card{grid-template-columns:5.5rem minmax(0,1fr)}}
 
+.catalog.movie-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,4vw,3.6rem)}
+.catalog.movie-grid .card{grid-template-columns:clamp(5.2rem,28%,9.5rem) minmax(0,1fr)}
+@media(max-width:31rem){.catalog.movie-grid{grid-template-columns:1fr}.catalog.movie-grid .card{grid-template-columns:5.5rem minmax(0,1fr)}}
+
 .empty{color:var(--muted);padding:1rem 0}.edit{display:inline-block;margin-top:1.6rem;color:var(--muted);font-size:.85rem}
 [hidden]{display:none!important}
 .date{display:block}
