@@ -3,42 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Cheap-Cheer 的个人博客，记录随笔、阅读与动手做的东西。">
-<title>Cheap-Cheer 的随手记</title>
-<style>
-:root{color-scheme:light;--paper:#f1f3fb;--ink:#212643;--muted:#4e5573;--accent:#3845a0;--line:#c8cee8;--surface:#fafaff}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.8 "Inter",system-ui,sans-serif}
-.wrap{width:min(100% - 2.5rem,62rem);margin-inline:auto}
-a{color:var(--accent);text-underline-offset:.25em}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
-header .wrap,footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem 2rem;padding-block:1.25rem}
-header{border-bottom:1px solid var(--line)}
-header a{text-decoration:none;font-weight:650}
-header a:hover{text-decoration:underline}
-nav{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem}
-.hero{padding-block:clamp(3.5rem,10vw,7rem) clamp(3rem,8vw,5rem)}
-.hero h1{font-family:"Instrument Serif","Songti SC","Noto Serif CJK SC",Georgia,serif;font-size:clamp(2.5rem,8vw,5.5rem);line-height:1.15;letter-spacing:-.04em;margin:0}
-h2{font-size:1rem;margin:0 0 1rem;color:var(--muted)}
-aside{max-width:38rem;border-top:1px solid var(--line);padding-top:1rem}
-footer{border-top:1px solid var(--line);margin-top:clamp(3rem,8vw,6rem);color:var(--muted);font-size:.9rem}
-</style>
+<title>首页 · Cheap-Cheer</title>
+<link rel="stylesheet" href="journal.css">
+<script src="journal.js" defer></script>
 </head>
 <body>
-<header><div class="wrap">
-<a href="./">Cheap-Cheer</a>
-<nav aria-label="主导航"><a href="movies.html">电影</a><a href="reading.html">阅读</a><a href="#about">关于</a><a href="https://github.com/Cheap-Cheer">GitHub</a></nav>
+<header><div class="wrap top">
+<a class="logo" href="./" aria-label="首页">/</a>
+<nav aria-label="主导航"><a href="./" aria-current="page">首页</a><a href="movies.html">电影</a><a href="reading.html">阅读</a><a href="about.html">关于</a></nav>
 </div></header>
-<main class="wrap">
-<section class="hero" aria-labelledby="title">
-<h1 id="title">随手记</h1>
-</section>
-<aside id="about" aria-labelledby="about-title">
-<h2 id="about-title">关于</h2>
-<p>这是 Cheap-Cheer 的个人博客。</p>
-<p><a href="https://github.com/Cheap-Cheer">在 GitHub 上找到我</a></p>
-</aside>
+<main class="wrap" data-page="home">
+<div class="home"><section id="movies"><h1>电影</h1><div class="cards" aria-live="polite"></div><a href="movies.html">查看全部 →</a></section><section id="reading"><h1>阅读</h1><div class="cards" aria-live="polite"></div><a href="reading.html">查看全部 →</a></section></div>
 </main>
-<footer><div class="wrap"><span>© 2026 Cheap-Cheer</span><a href="#title">返回顶部 ↑</a></div></footer>
 </body>
 </html>
