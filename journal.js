@@ -11,10 +11,12 @@ function renderRecord({ title, date, rating, review }) {
   const metadata = document.createElement("p");
   metadata.className = "metadata";
   const dateField = document.createElement("span");
-  const time = document.createElement("time");
-  time.dateTime = date;
   const [year, month, day] = date.split("-");
-  time.textContent = day ? date : `${year}年${Number(month)}月`;
+  const time = document.createElement(month ? "time" : "span");
+  if (month) time.dateTime = date;
+  time.textContent = year + "年";
+  if (month) time.textContent = `${year}年${Number(month)}月`;
+  if (day) time.textContent = date;
   dateField.append(dateLabel + " ", time);
 
   const stars = document.createElement("span");
@@ -42,7 +44,7 @@ async function loadRecords() {
     const { records } = await response.json();
     const valid = records.filter((record) =>
       typeof record?.title === "string" && record.title.trim() &&
-      typeof record.date === "string" && /^\d{4}-(0[1-9]|1[0-2])(?:-(0[1-9]|[12]\d|3[01]))?$/.test(record.date) &&
+      typeof record.date === "string" && /^\d{4}(?:-(0[1-9]|1[0-2])(?:-(0[1-9]|[12]\d|3[01]))?)?$/.test(record.date) &&
       Number.isInteger(record.rating) && record.rating >= 1 && record.rating <= 5 &&
       typeof record.review === "string"
     );
