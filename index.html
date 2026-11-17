@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Cheap-Cheer 的个人博客，记录随笔、阅读与动手做的东西。">
+<title>Cheap-Cheer 的随手记</title>
+<style>
+:root{color-scheme:light;--paper:#f1f3fb;--ink:#212643;--muted:#4e5573;--accent:#3845a0;--line:#c8cee8;--surface:#fafaff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.8 "Inter",system-ui,sans-serif}
+.wrap{width:min(100% - 2.5rem,62rem);margin-inline:auto}
+a{color:var(--accent);text-underline-offset:.25em}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+header .wrap,footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem 2rem;padding-block:1.25rem}
+header{border-bottom:1px solid var(--line)}
+header a{text-decoration:none;font-weight:650}
+header a:hover{text-decoration:underline}
+nav{display:flex;gap:1.25rem}
+.hero{padding-block:clamp(3.5rem,10vw,7rem) clamp(3rem,8vw,5rem)}
+.hero h1{font-family:"Instrument Serif","Songti SC","Noto Serif CJK SC",Georgia,serif;font-size:clamp(2.5rem,8vw,5.5rem);line-height:1.15;letter-spacing:-.04em;margin:0}
+.hero p{margin:1.25rem 0 0;color:var(--muted);font-size:1.1rem}
+.columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:clamp(2rem,7vw,5rem);align-items:start}
+h2{font-size:1rem;margin:0 0 1rem;color:var(--muted)}
+article{padding:1.5rem clamp(1.25rem,4vw,2.5rem);background:var(--surface);border-inline-start:4px solid var(--accent)}
+time{font: .85rem ui-monospace,monospace;color:var(--muted)}
+h3{font-size:1.65rem;margin:.4rem 0 .75rem;line-height:1.35}
+article p:last-child,aside p:last-child{margin-bottom:0}
+aside{border-top:1px solid var(--line);padding-top:1rem}
+footer{border-top:1px solid var(--line);margin-top:clamp(3rem,8vw,6rem);color:var(--muted);font-size:.9rem}
+@media(max-width:43rem){.columns{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a href="./">Cheap-Cheer</a>
+<nav aria-label="主导航"><a href="#posts">文章</a><a href="#about">关于</a><a href="https://github.com/Cheap-Cheer">GitHub</a></nav>
+</div></header>
+<main class="wrap">
+<section class="hero" aria-labelledby="title">
+<h1 id="title">随手记</h1>
+<p>写点随笔，记下读过的东西和动手做的事。</p>
+</section>
+<div class="columns">
+<section id="posts" aria-labelledby="latest">
+<h2 id="latest">最新文章</h2>
+<article>
+<time datetime="2026-11-17">2026.11.17</time>
+<h3>博客开张了</h3>
+<p>第一篇就从这里开始。以后遇到想留住的想法、值得重读的段落，或者做完才想明白的小事，就写在这里。</p>
+</article>
+</section>
+<aside id="about" aria-labelledby="about-title">
+<h2 id="about-title">关于</h2>
+<p>这是 Cheap-Cheer 的个人博客。</p>
+<p><a href="https://github.com/Cheap-Cheer">在 GitHub 上找到我</a></p>
+</aside>
+</div>
+</main>
+<footer><div class="wrap"><span>© 2026 Cheap-Cheer</span><a href="#title">返回顶部 ↑</a></div></footer>
+</body>
+</html>
