@@ -51,8 +51,24 @@ details{margin-top:.3rem}
 summary{cursor:pointer;color:var(--muted);font-size:.78rem}
 details .review{margin-top:.35rem}
 .pagination{justify-content:center;margin-top:1.6rem}
-.about p{margin:.8rem 0}
-.about a{text-decoration:underline}
+.profile{--split:clamp(2rem,5vw,4.6rem);display:grid;grid-template-columns:minmax(12.5rem,17rem) minmax(0,1fr);column-gap:var(--split);align-items:stretch}
+.profile-side p{margin:1.05rem 0 0;max-width:17rem;color:var(--muted);font-size:.92rem;line-height:1.75}
+.avatar-link{display:block;width:min(100%,17rem);border-radius:1.15rem}
+.avatar-link:hover{text-decoration:none}
+.avatar{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:1.15rem;background:#e9e8e4}
+.profile h1,.profile h2{font-family:"Songti SC","Noto Serif CJK SC",serif;font-weight:500}
+.profile h1{font-size:clamp(2.15rem,3.6vw,2.7rem)}
+.profile-main{position:relative;min-width:0}
+.profile-main::before{content:"";position:absolute;inset:0 auto 0 calc(var(--split) / -2);border-left:1px solid var(--line)}
+.profile-main>p{max-width:41.5em;margin-top:.95rem;line-height:1.8}
+.profile h2{margin-top:2.45rem;font-size:1.45rem}
+.interests{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.35rem 1.6rem;max-width:44rem;margin:1.25rem 0 0;padding:0;list-style:none}
+.interests svg{display:block;width:1.7rem;height:1.7rem;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.interests h3{margin:.7rem 0 .3rem;font-size:1.02rem;font-weight:600}
+.interests p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.65}
+@media(max-width:68rem){.interests{grid-template-columns:repeat(2,minmax(0,1fr));max-width:36rem}}
+@media(max-width:43rem){.profile{grid-template-columns:1fr;row-gap:1.7rem}.profile-main::before{display:none}}
+@media(max-width:31rem){.interests{grid-template-columns:1fr}}
 @media(max-width:72rem){.catalog{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:56rem){.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:43rem){.home{grid-template-columns:1fr}.home section+section::before{display:none}.top{height:4.4rem}}
