@@ -3,29 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>电影 · 随手记</title>
+<title>电影 · Cheap-Cheer</title>
 <link rel="stylesheet" href="journal.css">
 <script src="journal.js" defer></script>
 </head>
-<body data-douban-kind="movie" data-source="movies.json" data-empty="还没有电影记录。">
-<header><div class="wrap masthead">
-<a class="brand" href="./">Cheap-Cheer</a>
-<nav aria-label="主导航"><a href="./">首页</a><a href="movies.html" aria-current="page">电影</a><a href="reading.html">阅读</a><a href="https://github.com/Cheap-Cheer">GitHub</a></nav>
+<body>
+<header><div class="wrap top">
+<a class="logo" href="./" aria-label="首页">/</a>
+<nav aria-label="主导航"><a href="./">首页</a><a href="movies.html" aria-current="page">电影</a><a href="reading.html">阅读</a><a href="about.html">关于</a></nav>
 </div></header>
-<main class="wrap">
-<div class="intro">
-<h1>电影</h1>
-</div>
-<section aria-labelledby="records-title">
-<div class="section-head">
-<h2 id="records-title">记录</h2>
-<a href="https://github.com/Cheap-Cheer/Cheap-Cheer.github.io/edit/main/movies.json">在 GitHub 添加记录 ↗</a>
-</div>
-<p id="journal-status" role="status">正在加载记录…</p>
-<noscript><p>请启用 JavaScript 查看记录。</p></noscript>
-<ul id="journal-records"></ul>
-</section>
+<main class="wrap" data-page="movies">
+<h1>电影</h1><p role="status">加载记录中…</p>
 </main>
-<footer><div class="wrap">© 2026 Cheap-Cheer</div></footer>
 </body>
 </html>
