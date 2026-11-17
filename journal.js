@@ -13,7 +13,8 @@ function renderRecord({ title, date, rating, review }) {
   const dateField = document.createElement("span");
   const time = document.createElement("time");
   time.dateTime = date;
-  time.textContent = date;
+  const [year, month, day] = date.split("-");
+  time.textContent = day ? date : `${year}年${Number(month)}月`;
   dateField.append(dateLabel + " ", time);
 
   const stars = document.createElement("span");
@@ -41,7 +42,7 @@ async function loadRecords() {
     const { records } = await response.json();
     const valid = records.filter((record) =>
       typeof record?.title === "string" && record.title.trim() &&
-      typeof record.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(record.date) &&
+      typeof record.date === "string" && /^\d{4}-(0[1-9]|1[0-2])(?:-(0[1-9]|[12]\d|3[01]))?$/.test(record.date) &&
       Number.isInteger(record.rating) && record.rating >= 1 && record.rating <= 5 &&
       typeof record.review === "string"
     );
