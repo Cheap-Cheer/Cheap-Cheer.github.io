@@ -2,7 +2,7 @@ const { source, dateLabel, reviewLabel, empty, doubanKind } = document.body.data
 const statusMessage = document.querySelector("#journal-status");
 const list = document.querySelector("#journal-records");
 
-function renderRecord({ title, date, rating, review, doubanId }) {
+function renderRecord({ title, date, rating, review, doubanId, releaseYear }) {
   const item = document.createElement("li");
   const article = document.createElement("article");
   const heading = document.createElement("h3");
@@ -17,6 +17,12 @@ function renderRecord({ title, date, rating, review, doubanId }) {
     link.href = `https://www.douban.com/search?${query}`;
   }
   heading.append(link);
+  if (doubanKind === "movie" && Number.isInteger(releaseYear)) {
+    const yearLabel = document.createElement("span");
+    yearLabel.className = "release-year";
+    yearLabel.textContent = `（${releaseYear}）`;
+    heading.append(yearLabel);
+  }
 
   const metadata = document.createElement("p");
   metadata.className = "metadata";

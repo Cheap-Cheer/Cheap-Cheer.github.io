@@ -28,6 +28,7 @@ h2 { margin: 0; font-size: 1.15rem; }
 #journal-records { display: grid; gap: 1rem; list-style: none; padding: 0; }
 article { background: var(--surface); border-inline-start: 4px solid var(--accent); padding: 1.25rem clamp(1rem, 4vw, 2rem); overflow-wrap: anywhere; }
 h3 { margin: 0; font-size: 1.55rem; }
+.release-year { color: var(--muted); font-size: .75em; font-weight: normal; white-space: nowrap; }
 .metadata { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.5rem; margin-block: .5rem 0; }
 .stars { color: var(--accent); letter-spacing: .12em; font-size: 1.2rem; }
 h4 { margin-block: 1rem .25rem; }
