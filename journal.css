@@ -78,7 +78,8 @@ button:disabled{color:#767676;cursor:default}
 @media(max-width:31rem){.catalog{grid-template-columns:1fr}.card{grid-template-columns:5.5rem minmax(0,1fr)}}
 
 .catalog.book-grid{grid-template-columns:1fr}
-.catalog.movie-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,4vw,3.6rem)}
+.catalog.movie-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,4vw,3.6rem);align-items:start}
+.movie-col{min-width:0}
 .catalog.movie-grid .card{grid-template-columns:clamp(5.2rem,28%,9.5rem) minmax(0,1fr)}
 @media(max-width:31rem){.catalog.movie-grid{grid-template-columns:1fr}.catalog.movie-grid .card{grid-template-columns:5.5rem minmax(0,1fr)}}
 

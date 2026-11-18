@@ -63,6 +63,16 @@ function fillPagination(pagination, pageCount, current, onPick) {
   pagination.append(pageButton("下一页 ›", current + 1));
 }
 
+function placeCards(grid, cards, split) {
+  if (!split || !cards.length || cards[0].tagName !== "ARTICLE") {
+    grid.replaceChildren(...cards);
+    return;
+  }
+  const columns = [element("div", "movie-col"), element("div", "movie-col")];
+  cards.forEach((card, index) => columns[index % 2].append(card));
+  grid.replaceChildren(...columns);
+}
+
 function visibleRecords(records, year, sortValue) {
   const selected = records.filter((record) => !year || record.date.startsWith(year));
   if (sortValue === "rating") selected.sort((a, b) => b.rating - a.rating || byNewest(a, b));
@@ -82,6 +92,7 @@ export function renderCatalog(root, key, records) {
 
   const gridClass = key === "reading" ? "catalog book-grid" : "catalog movie-grid";
   const grid = element("div", gridClass);
+  const narrowMovies = window.matchMedia("(max-width: 31rem)");
   const pagination = element("nav", "pagination");
   pagination.setAttribute("aria-label", "分页");
 
@@ -111,9 +122,10 @@ export function renderCatalog(root, key, records) {
 
     const start = (current - 1) * view.size;
     const visible = selected.slice(start, start + view.size);
-    grid.replaceChildren(...(visible.length
+    const cards = visible.length
       ? visible.map((record) => createCard(record, view.kind))
-      : [element("p", "empty", view.empty)]));
+      : [element("p", "empty", view.empty)];
+    placeCards(grid, cards, key === "movies" && !narrowMovies.matches);
 
     const pageCount = Math.ceil(selected.length / view.size);
     fillPagination(pagination, pageCount, current, (number) => {
@@ -122,5 +134,6 @@ export function renderCatalog(root, key, records) {
     });
   }
 
+  if (key === "movies") narrowMovies.addEventListener("change", draw);
   draw();
 }
