@@ -230,6 +230,24 @@
       "doubanId": "2043546",
       "releaseYear": 2007,
       "poster": "posters/秒速5厘米.jpg"
+    },
+    {
+      "title": "给阿嬷的情书",
+      "date": "2026-06-07",
+      "rating": 5,
+      "review": "非常棒的电影，无需多言。",
+      "doubanId": "37116446",
+      "releaseYear": 2026,
+      "poster": "posters/给阿嬷的情书.jpg"
+    },
+    {
+      "title": "飞驰人生3",
+      "date": "2026-02-17",
+      "rating": 4,
+      "review": "围绕这个主角很难再整出新活了，不过质量还是可以的，这个系列差不多该完结了。",
+      "doubanId": "37311135",
+      "releaseYear": 2026,
+      "poster": "posters/飞驰人生3.jpg"
     }
   ],
   "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
