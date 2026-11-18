@@ -57,9 +57,10 @@ function reviewOverflows(preview) {
 
 function appendReview(body, review) {
   const preview = element("p", "review clipped", review);
-  const button = element("button", "review-more");
+  const button = element("button", "review-more is-off");
   button.type = "button";
-  button.hidden = true;
+  button.tabIndex = -1;
+  button.setAttribute("aria-hidden", "true");
   button.setAttribute("aria-expanded", "false");
   button.setAttribute("aria-label", "展开感想");
   button.append(chevron());
@@ -80,12 +81,16 @@ function appendReview(body, review) {
     const open = button.getAttribute("aria-expanded") === "true";
     if (!overflow) {
       preview.classList.remove("clipped");
-      button.hidden = true;
+      button.classList.add("is-off");
+      button.tabIndex = -1;
+      button.setAttribute("aria-hidden", "true");
       button.setAttribute("aria-expanded", "false");
       button.setAttribute("aria-label", "展开感想");
       return;
     }
-    button.hidden = false;
+    button.classList.remove("is-off");
+    button.tabIndex = 0;
+    button.removeAttribute("aria-hidden");
     preview.classList.toggle("clipped", !open);
   };
   const observer = new ResizeObserver(update);
