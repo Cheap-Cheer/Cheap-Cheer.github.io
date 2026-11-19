@@ -88,31 +88,13 @@
       "poster": "posters/蝙蝠侠：黑暗骑士.jpg"
     },
     {
-      "title": "蜘蛛侠",
+      "title": "超凡蜘蛛侠2",
       "date": "2026-08",
-      "rating": 5,
-      "review": "是我记忆中的蜘蛛侠",
-      "doubanId": "1306612",
-      "releaseYear": 2002,
-      "poster": "posters/蜘蛛侠（托比马奎尔版）.jpg"
-    },
-    {
-      "title": "蜘蛛侠2",
-      "date": "2026-08",
-      "rating": 5,
-      "review": "是我记忆中的蜘蛛侠",
-      "doubanId": "1308570",
-      "releaseYear": 2004,
-      "poster": "posters/蜘蛛侠2（托比马奎尔版）.jpg"
-    },
-    {
-      "title": "蜘蛛侠3",
-      "date": "2026-08",
-      "rating": 3,
-      "review": "大杂烩全塞到一块了，哎。",
-      "doubanId": "1418189",
-      "releaseYear": 2007,
-      "poster": "posters/蜘蛛侠3（托比马奎尔版）.jpg"
+      "rating": 2,
+      "review": "这一部更神了。只有帕克（拥有这一支血脉的人）才能成为蜘蛛侠，帕克从一个偶然获得超能力的普通人，变成了一个因为父亲的基因研究而被选中的特殊人物，可是我认为蜘蛛侠最有价值的设定，就是帕克没有成为英雄的先天资格。他之所以值得被称为英雄，完全取决于获得力量之后作出的选择。最后还把格温整死了，无语。",
+      "doubanId": "6082518",
+      "releaseYear": 2014,
+      "poster": "posters/超凡蜘蛛侠2.jpg"
     },
     {
       "title": "超凡蜘蛛侠",
@@ -124,13 +106,31 @@
       "poster": "posters/超凡蜘蛛侠.jpg"
     },
     {
-      "title": "超凡蜘蛛侠2",
+      "title": "蜘蛛侠3",
       "date": "2026-08",
-      "rating": 2,
-      "review": "这一部更神了。只有帕克（拥有这一支血脉的人）才能成为蜘蛛侠，帕克从一个偶然获得超能力的普通人，变成了一个因为父亲的基因研究而被选中的特殊人物，可是我认为蜘蛛侠最有价值的设定，就是帕克没有成为英雄的先天资格。他之所以值得被称为英雄，完全取决于获得力量之后作出的选择。最后还把格温整死了，无语。",
-      "doubanId": "6082518",
-      "releaseYear": 2014,
-      "poster": "posters/超凡蜘蛛侠2.jpg"
+      "rating": 3,
+      "review": "大杂烩全塞到一块了，哎。",
+      "doubanId": "1418189",
+      "releaseYear": 2007,
+      "poster": "posters/蜘蛛侠3（托比马奎尔版）.jpg"
+    },
+    {
+      "title": "蜘蛛侠2",
+      "date": "2026-08",
+      "rating": 5,
+      "review": "是我记忆中的蜘蛛侠",
+      "doubanId": "1308570",
+      "releaseYear": 2004,
+      "poster": "posters/蜘蛛侠2（托比马奎尔版）.jpg"
+    },
+    {
+      "title": "蜘蛛侠",
+      "date": "2026-08",
+      "rating": 5,
+      "review": "是我记忆中的蜘蛛侠",
+      "doubanId": "1306612",
+      "releaseYear": 2002,
+      "poster": "posters/蜘蛛侠（托比马奎尔版）.jpg"
     },
     {
       "title": "蜘蛛侠：崭新之日",
@@ -257,6 +257,24 @@
       "doubanId": "27191173",
       "releaseYear": 2018,
       "poster": "posters/恋如雨止.jpg"
+    },
+    {
+      "title": "平场之月",
+      "date": "2026-08",
+      "rating": 4,
+      "review": "中（老）年人的爱情，更像是互相的陪伴。最后有一种很微妙的幸福与遗憾，幸福在于，原来我思念你的时候，你也正在思念我；遗憾在于，他们直到最后，都没有机会知道这件事。明明是双向的思念，最后却各自成了孤独的等待。",
+      "doubanId": "34930810",
+      "releaseYear": 2025,
+      "poster": "posters/平场之月.jpg"
+    },
+    {
+      "title": "惊蛰无声",
+      "date": "2026-02",
+      "rating": 1,
+      "review": "刘诗诗漂亮。",
+      "doubanId": "37242440",
+      "releaseYear": 2026,
+      "poster": "posters/惊蛰无声.jpg"
     }
   ],
   "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
