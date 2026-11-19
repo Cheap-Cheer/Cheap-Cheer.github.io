@@ -1,24 +1,60 @@
 import { element } from "./dom.js";
 
 const earliestYear = 1900;
-const beforeYear = 2026;
+const latestYear = 2026;
 
 function isItem(item) {
   return typeof item?.title === "string" && item.title.trim()
     && Number.isInteger(item.year)
     && item.year >= earliestYear
-    && item.year < beforeYear;
+    && item.year <= latestYear;
 }
 
 function itemsOf(value) {
   return Array.isArray(value) ? value.filter(isItem) : [];
 }
 
-export async function loadArchive() {
-  const response = await fetch("archive.json");
+function yearOf(record, field) {
+  if (Number.isInteger(record?.[field])) return record[field];
+  const year = Number(String(record?.date || "").slice(0, 4));
+  return Number.isInteger(year) ? year : NaN;
+}
+
+function mergeItems(stored, extra) {
+  const seen = new Set();
+  const items = [];
+  for (const item of [...stored, ...extra]) {
+    if (!isItem(item) || seen.has(item.title.trim())) continue;
+    seen.add(item.title.trim());
+    items.push({ title: item.title.trim(), year: item.year });
+  }
+  return items;
+}
+
+async function loadJson(name) {
+  const response = await fetch(name);
   if (!response.ok) throw new Error("记录文件不可用");
-  const data = await response.json();
-  return { movies: itemsOf(data.movies), books: itemsOf(data.books) };
+  return response.json();
+}
+
+export async function loadArchive() {
+  const [archive, movies, reading] = await Promise.all([
+    loadJson("archive.json"),
+    loadJson("movies.json"),
+    loadJson("reading.json"),
+  ]);
+  const movieRecords = Array.isArray(movies.records) ? movies.records : [];
+  const bookRecords = Array.isArray(reading.records) ? reading.records : [];
+  return {
+    movies: mergeItems(itemsOf(archive.movies), movieRecords.map((record) => ({
+      title: record.title,
+      year: yearOf(record, "releaseYear"),
+    }))),
+    books: mergeItems(itemsOf(archive.books), bookRecords.map((record) => ({
+      title: record.title,
+      year: yearOf(record, "publishYear"),
+    }))),
+  };
 }
 
 function groupByYear(items) {
@@ -60,7 +96,7 @@ function renderColumn(name, items, unit) {
 }
 
 export function renderArchive(root, archive) {
-  const note = element("p", "archive-note", "2026 年以前看过的电影和书，按上映时间排序，纯记录，一时半会儿想不起来那么多，持续更新中。");
+  const note = element("p", "archive-note", "看过的电影和书，按上映时间排序，纯记录，一时半会儿想不起来那么多，持续更新中。");
   const columns = element("div", "archive");
   columns.append(
     renderColumn("电影", archive.movies, "部电影"),
@@ -68,5 +104,5 @@ export function renderArchive(root, archive) {
   );
   const edit = element("a", "edit", "在 GitHub 添加记录 ↗");
   edit.href = "https://github.com/Cheap-Cheer/Cheap-Cheer.github.io/edit/main/archive.json";
-  root.replaceChildren(element("h1", "", "往年已看"), note, columns, edit);
+  root.replaceChildren(element("h1", "", "全部"), note, columns, edit);
 }
