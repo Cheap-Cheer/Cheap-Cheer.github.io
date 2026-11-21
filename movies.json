@@ -289,6 +289,16 @@
       "doubanId": "30225296",
       "releaseYear": 2019,
       "poster": "posters/柳烈的音乐专辑.jpg"
+    },
+    {
+      "title": "重力小丑",
+      "tmdbId": 99188,
+      "date": "2026-11-21",
+      "rating": 5,
+      "review": "泉水和春的英文都是spring。温馨但有刀的家庭故事。吉高由里子饰演一个跟踪狂，还挺可爱的，哈哈。",
+      "doubanId": "3727653",
+      "releaseYear": 2009,
+      "poster": "posters/重力小丑.jpg"
     }
   ],
   "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
