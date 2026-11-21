@@ -98,7 +98,9 @@ function appendReview(body, review) {
 }
 
 function appendPoster(article, record) {
-  const source = posterSource(record);
+  const fallback = posterSource(record);
+  const source = /^\/[A-Za-z0-9]+\.jpg$/.test(record.tmdbPoster)
+    ? "https://image.tmdb.org/t/p/w342" + record.tmdbPoster : fallback;
   if (!source) return;
 
   const cover = element("div", "cover");
@@ -107,9 +109,13 @@ function appendPoster(article, record) {
   image.loading = "lazy";
   image.referrerPolicy = "no-referrer";
   image.addEventListener("error", () => {
+    if (fallback && image.getAttribute("src") !== fallback) {
+      image.src = fallback;
+      return;
+    }
     cover.remove();
     article.classList.add("text-only");
-  }, { once: true });
+  });
   cover.append(image);
   article.append(cover);
   article.classList.remove("text-only");

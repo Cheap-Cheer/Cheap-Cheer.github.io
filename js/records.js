@@ -22,6 +22,16 @@ export async function loadRecords(key) {
   const response = await fetch(`${key}.json`);
   if (!response.ok) throw new Error("记录文件不可用");
   const { records } = await response.json();
+  if (key === "movies") {
+    // Actions commits do not trigger a branch-based Pages rebuild. Read the published index directly.
+    const indexUrl = location.hostname === "cheap-cheer.github.io"
+      ? "https://raw.githubusercontent.com/cheap-cheer/cheap-cheer.github.io/main/movie-posters.json"
+      : "movie-posters.json";
+    const index = await fetch(indexUrl, { signal: AbortSignal.timeout(3000) }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    for (const record of records) {
+      if (record) record.tmdbPoster = index[JSON.stringify([record.title, record.releaseYear ?? null, record.tmdbId ?? null])];
+    }
+  }
   return records.filter((record) => isRecord(record, key)).sort(byNewest);
 }
 
