@@ -299,6 +299,16 @@
       "doubanId": "3727653",
       "releaseYear": 2009,
       "poster": "posters/重力小丑.jpg"
+    },
+    {
+      "title": "我的妈耶",
+      "tmdbId": 1421609,
+      "date": "2026-04-12",
+      "rating": 3,
+      "review": "其实我很喜欢马思纯，但年纪确实上来了，别演高中生了。",
+      "doubanId": "36217763",
+      "releaseYear": 2026,
+      "poster": "posters/我的妈耶.jpg"
     }
   ],
   "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
