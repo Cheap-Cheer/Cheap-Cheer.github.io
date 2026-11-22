@@ -309,6 +309,16 @@
       "doubanId": "36217763",
       "releaseYear": 2026,
       "poster": "posters/我的妈耶.jpg"
+    },
+    {
+      "title": "偷窥者",
+      "tmdbId": 645710,
+      "date": "2026-11-22",
+      "rating": 3,
+      "review": "久仰悉尼妹大名，让GPT推荐了一个她的作品来看。整个故事还是不错的，讨论了隐私以及各种隐私条款格式条款，如果停在摄影展时结束将绝杀，可惜停不得。",
+      "doubanId": "34981939",
+      "releaseYear": 2021,
+      "poster": "posters/偷窥者.jpg"
     }
   ],
   "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
