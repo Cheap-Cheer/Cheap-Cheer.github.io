@@ -74,9 +74,9 @@ function renderMovies(items) {
   filters.setAttribute("role", "group");
   filters.setAttribute("aria-label", "按年代筛选");
   const buttons = new Map();
-  let selected = decades.find(([key]) => present.has(key))?.[0] ?? "";
+  let selected = "";
   let current = 1;
-  for (const [key, label] of [...decades.filter(([key]) => present.has(key)), ["", "全部"]]) {
+  for (const [key, label] of [["", "全部"], ...decades.filter(([key]) => present.has(key))]) {
     const total = key ? present.get(key) : items.length;
     const button = element("button", "", `${label}（${total}）`);
     button.addEventListener("click", () => {
