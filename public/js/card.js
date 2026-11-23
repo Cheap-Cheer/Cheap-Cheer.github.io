@@ -1,26 +1,11 @@
 import { element } from "./dom.js";
 
-function dateText(date) {
-  const [year, month, day] = date.split("-");
-  const parts = [year];
-  if (month) parts.push(month.padStart(2, "0"));
-  if (day) parts.push(day.padStart(2, "0"));
-  return parts.join("-");
-}
-
 function doubanLink(record, kind) {
   if (typeof record.doubanId === "string" && /^\d+$/.test(record.doubanId)) {
     return `https://${kind}.douban.com/subject/${record.doubanId}/`;
   }
   const category = kind === "movie" ? "1002" : "1001";
-  return "https://www.douban.com/search?" + new URLSearchParams({ q: record.title, cat: category });
-}
-
-function posterSource(record) {
-  if (typeof record.poster !== "string") return "";
-  if (/^https:\/\/[^/]+\.doubanio\.com\//.test(record.poster)) return record.poster;
-  if (/^posters\/[^/\\]+\.jpg$/.test(record.poster) && !record.poster.includes("..")) return record.poster;
-  return "";
+  return `https://www.douban.com/search?${new URLSearchParams({ q: record.title, cat: category })}`;
 }
 
 function chevron() {
@@ -34,25 +19,11 @@ function chevron() {
 }
 
 function reviewOverflows(preview) {
-  const width = preview.clientWidth;
-  if (!width) return false;
-  const probe = preview.cloneNode(true);
-  probe.hidden = false;
-  probe.classList.remove("clipped");
-  probe.style.position = "absolute";
-  probe.style.visibility = "hidden";
-  probe.style.pointerEvents = "none";
-  probe.style.width = `${width}px`;
-  probe.style.margin = "0";
-  preview.parentElement.append(probe);
-  const fullHeight = probe.getBoundingClientRect().height;
-  probe.style.display = "-webkit-box";
-  probe.style.webkitLineClamp = "2";
-  probe.style.webkitBoxOrient = "vertical";
-  probe.style.overflow = "hidden";
-  const clampedHeight = probe.getBoundingClientRect().height;
-  probe.remove();
-  return fullHeight - clampedHeight > 1;
+  if (!preview.clientWidth) return false;
+  const lineHeight = Number.parseFloat(getComputedStyle(preview).lineHeight);
+  if (!lineHeight) return false;
+  if (preview.classList.contains("clipped")) return preview.scrollHeight - preview.clientHeight > 1;
+  return preview.scrollHeight > lineHeight * 2 + 1;
 }
 
 function appendReview(body, review) {
@@ -98,28 +69,19 @@ function appendReview(body, review) {
 }
 
 function appendPoster(article, record) {
-  const fallback = posterSource(record);
-  const source = /^\/[A-Za-z0-9]+\.jpg$/.test(record.tmdbPoster)
-    ? "https://image.tmdb.org/t/p/w342" + record.tmdbPoster : fallback;
-  if (!source) return;
-
+  if (typeof record.poster !== "string" || !/^\/posters\/[A-Za-z0-9]+\.webp$/.test(record.poster)) return;
   const cover = element("div", "cover");
   const image = element("img");
   image.alt = "";
   image.loading = "lazy";
-  image.referrerPolicy = "no-referrer";
   image.addEventListener("error", () => {
-    if (fallback && image.getAttribute("src") !== fallback) {
-      image.src = fallback;
-      return;
-    }
     cover.remove();
     article.classList.add("text-only");
   });
   cover.append(image);
   article.append(cover);
   article.classList.remove("text-only");
-  image.src = source;
+  image.src = record.poster;
 }
 
 export function createCard(record, kind, headingLevel = 2) {
@@ -130,14 +92,10 @@ export function createCard(record, kind, headingLevel = 2) {
   const link = element("a", "", record.title);
   link.href = doubanLink(record, kind);
   heading.append(link);
-  if (kind === "movie" && Number.isInteger(record.releaseYear)) {
-    heading.append(" ", element("span", "year", String(record.releaseYear)));
-  }
-  if (kind === "book" && Number.isInteger(record.publishYear)) {
-    heading.append(" ", element("span", "year", String(record.publishYear)));
-  }
+  const workYear = kind === "movie" ? record.releaseYear : record.publishYear;
+  if (Number.isInteger(workYear)) heading.append(" ", element("span", "year", String(workYear)));
 
-  const date = element(record.date.length > 4 ? "time" : "span", "date", dateText(record.date));
+  const date = element(record.date.length > 4 ? "time" : "span", "date", record.date);
   if (date.tagName === "TIME") date.dateTime = record.date;
 
   const body = element("div");

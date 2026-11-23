@@ -1,6 +1,7 @@
-import { element } from "./dom.js";
-import { byNewest, countByYear, views } from "./records.js";
 import { createCard } from "./card.js";
+import { element } from "./dom.js";
+import { canEdit } from "./owner.js";
+import { byNewest, countByYear, views } from "./records.js";
 
 const sortOptions = [
   ["date", "日期从新到旧"],
@@ -80,7 +81,7 @@ function visibleRecords(records, year, sortValue) {
   return selected;
 }
 
-export function renderCatalog(root, key, records) {
+function renderCatalog(root, key, records) {
   const view = views[key];
   let year = "";
   let current = 1;
@@ -90,32 +91,37 @@ export function renderCatalog(root, key, records) {
   const heading = element("div", "page-head");
   heading.append(element("h1", "", view.name), count);
 
-  const gridClass = key === "reading" ? "catalog book-grid" : "catalog movie-grid";
-  const grid = element("div", gridClass);
+  const grid = element("div", key === "reading" ? "catalog book-grid" : "catalog movie-grid");
   const narrowMovies = window.matchMedia("(max-width: 31rem)");
   const pagination = element("nav", "pagination");
   pagination.setAttribute("aria-label", "分页");
 
-  const edit = element("a", "edit", "在 GitHub 添加记录 ↗");
-  edit.href = `https://github.com/Cheap-Cheer/Cheap-Cheer.github.io/edit/main/${key}.json`;
-
-  const { filters, buttons } = buildYearFilters(records, (nextYear) => {
-    year = nextYear;
-    current = 1;
-    draw();
-  });
+  const showYears = countByYear(records).size > 1;
+  const { filters, buttons } = showYears
+    ? buildYearFilters(records, (nextYear) => {
+      year = nextYear;
+      current = 1;
+      draw();
+    })
+    : { filters: null, buttons: new Map() };
   const { label: sortLabel, sort } = buildSort(view.kind, () => {
     current = 1;
     draw();
   });
   const controls = element("div", "controls");
-  controls.append(filters, sortLabel);
+  controls.append(...[filters, sortLabel].filter(Boolean));
 
-  root.replaceChildren(heading, ...(records.length ? [controls] : []), grid, pagination, edit);
+  const children = [heading, ...(records.length ? [controls] : []), grid, pagination];
+  if (canEdit()) {
+    const edit = element("a", "edit", "在 GitHub 添加记录 ↗");
+    edit.href = `https://github.com/Cheap-Cheer/Cheap-Cheer.github.io/edit/main/${key}.json`;
+    children.push(edit);
+  }
+  root.replaceChildren(...children);
 
   function draw() {
     const selected = visibleRecords(records, year, sort.value);
-    count.replaceChildren(element("strong", "", String(selected.length)), " " + view.unit);
+    count.replaceChildren(element("strong", "", String(selected.length)), ` ${view.unit}`);
     for (const [filter, button] of buttons) {
       button.setAttribute("aria-pressed", String(filter === year));
     }
@@ -136,4 +142,8 @@ export function renderCatalog(root, key, records) {
 
   if (key === "movies") narrowMovies.addEventListener("change", draw);
   draw();
+}
+
+export function render(root, data) {
+  renderCatalog(root, root.dataset.page, data.records);
 }

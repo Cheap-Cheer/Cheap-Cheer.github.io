@@ -1,0 +1,11 @@
+{
+  "name": "cheap-cheer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate.mjs",
+    "sync-posters": "node scripts/sync-posters.mjs",
+    "preview": "node scripts/build.mjs && node scripts/serve.mjs"
+  }
+}
