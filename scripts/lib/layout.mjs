@@ -46,6 +46,7 @@ export function renderPage({ title, description, path, page, module, main, prelo
 ${preloads.map((href) => `<link rel="modulepreload" href="${href}">`).join("\n")}
 </head>
 <body>
+<div class="shell">
 <header><div class="wrap top">
 <a class="logo" href="/" aria-label="首页">/</a>
 <nav aria-label="主导航">${links}</nav>
@@ -58,6 +59,7 @@ ${main.trim()}
 <p>© 2026 Cheap-Cheer · 文字原创，评分与短评仅代表个人观点。海报由 <a href="https://www.themoviedb.org/">TMDB</a> 提供，版权归原权利人所有。 This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
 <a class="footer-github" href="https://github.com/Cheap-Cheer" target="_blank" rel="noreferrer">GitHub ↗</a>
 </div></footer>
+</div>
 <script src="/js/main.js" type="module"></script>
 </body>
 </html>

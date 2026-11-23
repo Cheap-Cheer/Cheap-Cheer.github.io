@@ -9,18 +9,94 @@ const sortOptions = [
   ["rating", "评分从高到低"],
 ];
 
-function buildSort(kind, onChange) {
-  const sort = element("select");
+function buildPicker(name, onPick) {
+  let current = "";
+  const field = element("div", "picker-field");
+  const caption = element("span", "", name);
+  caption.addEventListener("click", () => button.click());
+  field.append(caption, " ");
+  const picker = element("span", "picker");
+  const button = element("button", "picker-button");
+  button.type = "button";
+  button.setAttribute("aria-haspopup", "listbox");
+  button.setAttribute("aria-expanded", "false");
+  const menu = element("div", "picker-menu");
+  menu.setAttribute("role", "listbox");
+  menu.hidden = true;
+  picker.append(button, menu);
+  field.append(picker);
+
+  const close = () => {
+    menu.hidden = true;
+    button.setAttribute("aria-expanded", "false");
+  };
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const willOpen = menu.hidden;
+    for (const other of document.querySelectorAll(".picker-menu")) {
+      if (other === menu) continue;
+      other.hidden = true;
+      other.previousElementSibling?.setAttribute("aria-expanded", "false");
+    }
+    menu.hidden = !willOpen;
+    button.setAttribute("aria-expanded", String(willOpen));
+  });
+  document.addEventListener("click", (event) => {
+    if (!field.contains(event.target)) close();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") close();
+  });
+
+  return {
+    field,
+    get value() { return current; },
+    fill(options, selected) {
+      current = selected;
+      const chosen = options.find(([value]) => value === selected) ?? options[0];
+      button.textContent = chosen?.[1] ?? "";
+      menu.replaceChildren(...options.map(([value, text]) => {
+        const option = element("button", "", text);
+        option.type = "button";
+        option.setAttribute("role", "option");
+        option.setAttribute("aria-selected", String(value === selected));
+        option.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          close();
+          if (value !== current) onPick(value);
+        });
+        return option;
+      }));
+    },
+  };
+}
+
+function buildSort(kind, onPick) {
   const options = kind === "book" ? sortOptions.filter(([value]) => value !== "rating") : sortOptions;
-  for (const [value, label] of options) {
-    const option = element("option", "", label);
-    option.value = value;
-    sort.append(option);
-  }
-  sort.addEventListener("change", onChange);
-  const label = element("label", "", "排序 ");
-  label.append(sort);
-  return { label, sort };
+  const picker = buildPicker("排序", onPick);
+  picker.field.classList.add("sort-field");
+  picker.fill(options, "date");
+  return picker;
+}
+
+function yearChoices(records) {
+  const counts = countByYear(records);
+  const years = [...counts.keys()].sort((a, b) => b.localeCompare(a));
+  return [
+    ["", `全部（${records.length}）`],
+    ...years.map((year) => [year, `${year}（${counts.get(year)}）`]),
+  ];
+}
+
+function ratingChoices(records) {
+  const counts = new Map([5, 4, 3, 2, 1].map((score) => [score, 0]));
+  for (const record of records) counts.set(record.rating, (counts.get(record.rating) || 0) + 1);
+  return [
+    ["", `全部（${records.length}）`],
+    ...[5, 4, 3, 2, 1].map((score) => [String(score), `${score} 分（${counts.get(score)}）`]),
+  ];
 }
 
 function buildYearFilters(records, onPick) {
@@ -74,8 +150,11 @@ function placeCards(grid, cards, split) {
   grid.replaceChildren(...columns);
 }
 
-function visibleRecords(records, year, sortValue) {
-  const selected = records.filter((record) => !year || record.date.startsWith(year));
+function visibleRecords(records, year, rating, sortValue) {
+  const selected = records.filter((record) => (
+    (!year || record.date.startsWith(year))
+    && (!rating || record.rating === Number(rating))
+  ));
   if (sortValue === "rating") selected.sort((a, b) => b.rating - a.rating || byNewest(a, b));
   if (sortValue === "old") selected.reverse();
   return selected;
@@ -84,6 +163,7 @@ function visibleRecords(records, year, sortValue) {
 function renderCatalog(root, key, records) {
   const view = views[key];
   let year = "";
+  let rating = "";
   let current = 1;
 
   const count = element("span", "count");
@@ -96,17 +176,32 @@ function renderCatalog(root, key, records) {
   const pagination = element("nav", "pagination");
   pagination.setAttribute("aria-label", "分页");
 
-  const { filters, buttons } = buildYearFilters(records, (nextYear) => {
+  const yearPicker = key === "movies" ? buildPicker("年代", (value) => {
+    year = value;
+    current = 1;
+    draw();
+  }) : null;
+  const ratingPicker = key === "movies" ? buildPicker("评分", (value) => {
+    rating = value;
+    current = 1;
+    draw();
+  }) : null;
+  const { filters, buttons } = yearPicker ? { filters: null, buttons: new Map() } : buildYearFilters(records, (nextYear) => {
     year = nextYear;
     current = 1;
     draw();
   });
-  const { label: sortLabel, sort } = buildSort(view.kind, () => {
+  const sort = buildSort(view.kind, () => {
     current = 1;
     draw();
   });
   const controls = element("div", "controls");
-  controls.append(...[filters, sortLabel].filter(Boolean));
+  if (yearPicker) {
+    const picks = element("div", "filters");
+    picks.append(yearPicker.field, ratingPicker.field);
+    controls.append(picks);
+  }
+  controls.append(...[filters, sort.field].filter(Boolean));
 
   const children = [heading, ...(records.length ? [controls] : []), grid, pagination];
   if (canEdit()) {
@@ -117,7 +212,13 @@ function renderCatalog(root, key, records) {
   root.replaceChildren(...children);
 
   function draw() {
-    const selected = visibleRecords(records, year, sort.value);
+    if (yearPicker) {
+      const rated = rating ? records.filter((record) => record.rating === Number(rating)) : records;
+      const dated = year ? records.filter((record) => record.date.startsWith(year)) : records;
+      yearPicker.fill(yearChoices(rated), year);
+      ratingPicker.fill(ratingChoices(dated), rating);
+    }
+    const selected = visibleRecords(records, year, rating, sort.value);
     count.replaceChildren(element("strong", "", String(selected.length)), ` ${view.unit}`);
     for (const [filter, button] of buttons) {
       button.setAttribute("aria-pressed", String(filter === year));
