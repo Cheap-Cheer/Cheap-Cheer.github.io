@@ -517,6 +517,11 @@ button:disabled {
 
 .archive .filters { margin: 0.15rem 0 0.35rem; }
 
+.archive .pagination {
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
 .archive-head {
   display: flex;
   align-items: baseline;

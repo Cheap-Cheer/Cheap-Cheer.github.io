@@ -1,6 +1,8 @@
 import { element } from "./dom.js";
 import { canEdit } from "./owner.js";
 
+const pageSize = 36;
+
 const decades = [
   ["2020", "2020 年代"],
   ["2010", "2010 年代"],
@@ -27,9 +29,9 @@ function groupByYear(items) {
   return [...groups.entries()].sort((a, b) => b[0] - a[0]);
 }
 
-function renderNames(items) {
+function renderGroups(groups) {
   const list = element("div", "year-list");
-  for (const [year, titles] of groupByYear(items)) {
+  for (const [year, titles] of groups) {
     const group = element("section", "year-group");
     const heading = element("h3");
     const time = element("time", "", String(year));
@@ -41,6 +43,23 @@ function renderNames(items) {
     list.append(group);
   }
   return list;
+}
+
+function paginate(groups) {
+  const pages = [];
+  let page = [];
+  let count = 0;
+  for (const group of groups) {
+    if (page.length && count >= pageSize) {
+      pages.push(page);
+      page = [];
+      count = 0;
+    }
+    page.push(group);
+    count += group[1].length;
+  }
+  if (page.length) pages.push(page);
+  return pages;
 }
 
 function renderMovies(items) {
@@ -56,11 +75,13 @@ function renderMovies(items) {
   filters.setAttribute("aria-label", "按年代筛选");
   const buttons = new Map();
   let selected = decades.find(([key]) => present.has(key))?.[0] ?? "";
+  let current = 1;
   for (const [key, label] of [...decades.filter(([key]) => present.has(key)), ["", "全部"]]) {
     const total = key ? present.get(key) : items.length;
     const button = element("button", "", `${label}（${total}）`);
     button.addEventListener("click", () => {
       selected = key;
+      current = 1;
       draw();
     });
     filters.append(button);
@@ -68,13 +89,40 @@ function renderMovies(items) {
   }
 
   const listHost = element("div");
-  section.append(head, items.length ? filters : element("p", "empty", "还没有记录。"), listHost);
+  const pagination = element("nav", "pagination");
+  pagination.setAttribute("aria-label", "分页");
+  section.append(head, items.length ? filters : element("p", "empty", "还没有记录。"), listHost, pagination);
+
+  function fillPagination(pageCount) {
+    pagination.hidden = pageCount <= 1;
+    pagination.replaceChildren();
+    if (pageCount <= 1) return;
+    const pageButton = (label, number, isCurrent = false) => {
+      const button = element("button", "", label);
+      button.disabled = number < 1 || number > pageCount;
+      if (isCurrent) button.setAttribute("aria-current", "page");
+      button.addEventListener("click", () => {
+        current = number;
+        draw();
+        pagination.querySelector("[aria-current]")?.focus({ preventScroll: true });
+        section.scrollIntoView({ block: "start" });
+      });
+      return button;
+    };
+    pagination.append(pageButton("‹ 上一页", current - 1));
+    for (let number = 1; number <= pageCount; number += 1) pagination.append(pageButton(String(number), number, number === current));
+    pagination.append(pageButton("下一页 ›", current + 1));
+  }
 
   function draw() {
     const visible = selected ? items.filter((item) => decadeOf(item.year) === selected) : items;
+    const pages = paginate(groupByYear(visible));
+    if (current > pages.length) current = 1;
     count.replaceChildren(element("strong", "", String(visible.length)), " 部电影");
     for (const [key, button] of buttons) button.setAttribute("aria-pressed", String(key === selected));
-    listHost.replaceChildren(visible.length ? renderNames(visible) : element("p", "empty", "还没有记录。"));
+    const groups = pages[current - 1] ?? [];
+    listHost.replaceChildren(groups.length ? renderGroups(groups) : element("p", "empty", "还没有记录。"));
+    fillPagination(pages.length);
   }
 
   if (items.length) draw();
@@ -88,7 +136,7 @@ function renderBooks(items) {
   const count = element("p", "count");
   count.append(element("strong", "", String(items.length)), " 本书");
   head.append(element("h2", "", "书籍"), count);
-  section.append(head, items.length ? renderNames(items) : element("p", "empty", "还没有记录。"));
+  section.append(head, items.length ? renderGroups(groupByYear(items)) : element("p", "empty", "还没有记录。"));
   return section;
 }
 

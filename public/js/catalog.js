@@ -96,14 +96,11 @@ function renderCatalog(root, key, records) {
   const pagination = element("nav", "pagination");
   pagination.setAttribute("aria-label", "分页");
 
-  const showYears = countByYear(records).size > 1;
-  const { filters, buttons } = showYears
-    ? buildYearFilters(records, (nextYear) => {
-      year = nextYear;
-      current = 1;
-      draw();
-    })
-    : { filters: null, buttons: new Map() };
+  const { filters, buttons } = buildYearFilters(records, (nextYear) => {
+    year = nextYear;
+    current = 1;
+    draw();
+  });
   const { label: sortLabel, sort } = buildSort(view.kind, () => {
     current = 1;
     draw();
