@@ -276,8 +276,6 @@ button:disabled {
 
 .catalog.movie-grid .card { grid-template-columns: clamp(5.2rem, 28%, 9.5rem) minmax(0, 1fr); }
 
-.catalog.movie-grid .card h2 { min-height: 2.8em; }
-
 .catalog.movie-grid .review { min-height: 3.1em; }
 
 .card.text-only,
@@ -604,7 +602,6 @@ button:disabled {
   nav a { padding: 0.55rem 0; }
   .catalog.movie-grid { grid-template-columns: 1fr; }
   .catalog.movie-grid .card { grid-template-columns: 5.5rem minmax(0, 1fr); }
-  .catalog.movie-grid .card h2,
   .catalog.movie-grid .review { min-height: 0; }
   .catalog.movie-grid .review-more.is-off { display: none; }
   .interests { grid-template-columns: 1fr; }
