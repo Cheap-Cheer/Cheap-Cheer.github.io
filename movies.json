@@ -319,6 +319,16 @@
       "doubanId": "34981939",
       "releaseYear": 2021,
       "poster": "posters/偷窥者.jpg"
+    },
+    {
+      "title": "黑皮书",
+      "tmdbId": 9075,
+      "date": "2026-11-22",
+      "rating": 5,
+      "review": "战争残酷，人性复杂，唉。和《色，戒》题材相近，却更让我难受。女主承受了太多苦难与背叛，一次次反转让人唏嘘。还好经过国内谍战片的洗礼，对这些反转多少有了些承受能力……",
+      "doubanId": "1858802",
+      "releaseYear": 2006,
+      "poster": "posters/黑皮书.jpg"
     }
   ],
   "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
