@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "movies.schema.json",
+  "title": "电影记录",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "records"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/record" }
+    }
+  },
+  "definitions": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "date", "rating", "review"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^\\s*\\S[\\s\\S]*$",
+          "description": "作品名称。"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}(?:-(0[1-9]|1[0-2])(?:-(0[1-9]|[12]\\d|3[01]))?)?$",
+          "description": "观看日期。已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。"
+        },
+        "rating": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "个人评分，1 到 5。"
+        },
+        "review": {
+          "type": "string",
+          "description": "短评。"
+        },
+        "releaseYear": {
+          "type": "integer",
+          "minimum": 1900,
+          "description": "上映年份。不填时，「全部」页用观看日期的年份。不能晚于明年。"
+        },
+        "doubanId": {
+          "type": "string",
+          "pattern": "^\\d+$",
+          "description": "可选。知道豆瓣条目编号时填写，否则标题会打开豆瓣搜索。"
+        },
+        "tmdbId": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "可选。自动匹配海报失败时填写 TMDB 电影编号。"
+        }
+      }
+    }
+  }
+}

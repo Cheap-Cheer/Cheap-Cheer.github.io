@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archive.schema.json",
+  "title": "全部记录",
+  "description": "这里只记名字和上映或出版年份。今年的电影和书籍记录会一并显示在「全部」里，同一部作品按名称和年份去重。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "movies", "books"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "movies": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/item" }
+    },
+    "books": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/item" }
+    }
+  },
+  "definitions": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "year"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^\\s*\\S[\\s\\S]*$",
+          "description": "作品名称。"
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1900,
+          "description": "电影填上映年份，书籍填出版年份。不能晚于明年。"
+        }
+      }
+    }
+  }
+}

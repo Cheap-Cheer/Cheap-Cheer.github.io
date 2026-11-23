@@ -1,11 +1,5 @@
 {
-  "填写示例": {
-    "title": "作品名称",
-    "date": "2026-11-17",
-    "rating": 4,
-    "review": "写下你的感想。",
-    "releaseYear": 2020
-  },
+  "$schema": "./schemas/movies.schema.json",
   "records": [
     {
       "title": "横道世之介",
@@ -13,8 +7,7 @@
       "rating": 5,
       "review": "一部温柔且有后劲的电影。两个小时四十分钟，虽然很长很平，但很快就看完了，而且看完以后很有感触。光是遇到横道世之介，就已经赚到了。\n最喜欢与谢野祥子。非常的纯真可爱，非常的善良美好。悦子评价为宅男的最终幻想。哈哈哈。",
       "doubanId": "10484041",
-      "releaseYear": 2013,
-      "poster": "posters/横道世之介.jpg"
+      "releaseYear": 2013
     },
     {
       "title": "错过你的那些年",
@@ -22,8 +15,7 @@
       "rating": 4,
       "review": "女主长得像我的初中同学（男），有点绷不住。画面还是挺美的，看出来很模仿《情书》的风格。",
       "doubanId": "36245685",
-      "releaseYear": 2024,
-      "poster": "posters/错过你的那些年.jpg"
+      "releaseYear": 2024
     },
     {
       "title": "海街日记",
@@ -31,8 +23,7 @@
       "rating": 4,
       "review": "看完跟没看似的，但是看的过程还挺有意思。之前看《我的机器人女友》时，觉得绫濑遥好美。是那种很疏离的美，在《海街日记》里，完全变了一种风格，真的像邻家的大姐姐，在她的笑容里，有一种难言的苦涩，我很喜欢这种苦涩。",
       "doubanId": "25895901",
-      "releaseYear": 2015,
-      "poster": "posters/海街日记.jpg"
+      "releaseYear": 2015
     },
     {
       "title": "恋途未卜",
@@ -41,16 +32,14 @@
       "rating": 2,
       "review": "短视频刷到滨边美波，觉得很漂亮，去找了一些她的作品，然后看了，看完发现浪费了俩小时。",
       "doubanId": "33371681",
-      "releaseYear": 2020,
-      "poster": "posters/恋途未卜.jpg"
+      "releaseYear": 2020
     },
     {
       "title": "雏菊",
       "date": "2026-11",
       "rating": 3,
       "review": "有点老套，不过这片子本来就很老，还好吧。",
-      "releaseYear": 2006,
-      "poster": "posters/雏菊.jpg"
+      "releaseYear": 2006
     },
     {
       "title": "傻瓜",
@@ -58,8 +47,7 @@
       "rating": 4,
       "review": "有点老套，不过这片子本来就很老，还好吧。河智苑很漂亮，很温柔的那种漂亮。",
       "doubanId": "3077680",
-      "releaseYear": 2008,
-      "poster": "posters/傻瓜.jpg"
+      "releaseYear": 2008
     },
     {
       "title": "丈夫得了抑郁症",
@@ -67,8 +55,7 @@
       "rating": 4,
       "review": "日本很擅长拍这种温馨的电影，说实话剧情也比较老套了，但确实挺好看的。",
       "doubanId": "5968334",
-      "releaseYear": 2011,
-      "poster": "posters/丈夫得了抑郁症.jpg"
+      "releaseYear": 2011
     },
     {
       "title": "蝙蝠侠：侠影之谜",
@@ -76,8 +63,7 @@
       "rating": 5,
       "review": "经典，无需多言。",
       "doubanId": "1309069",
-      "releaseYear": 2005,
-      "poster": "posters/蝙蝠侠：侠影之谜.jpg"
+      "releaseYear": 2005
     },
     {
       "title": "蝙蝠侠：黑暗骑士",
@@ -85,8 +71,7 @@
       "rating": 5,
       "review": "经典，无需多言。",
       "doubanId": "1851857",
-      "releaseYear": 2008,
-      "poster": "posters/蝙蝠侠：黑暗骑士.jpg"
+      "releaseYear": 2008
     },
     {
       "title": "超凡蜘蛛侠2",
@@ -94,8 +79,7 @@
       "rating": 2,
       "review": "这一部更神了。只有帕克（拥有这一支血脉的人）才能成为蜘蛛侠，帕克从一个偶然获得超能力的普通人，变成了一个因为父亲的基因研究而被选中的特殊人物，可是我认为蜘蛛侠最有价值的设定，就是帕克没有成为英雄的先天资格。他之所以值得被称为英雄，完全取决于获得力量之后作出的选择。最后还把格温整死了，无语。",
       "doubanId": "6082518",
-      "releaseYear": 2014,
-      "poster": "posters/超凡蜘蛛侠2.jpg"
+      "releaseYear": 2014
     },
     {
       "title": "超凡蜘蛛侠",
@@ -103,8 +87,7 @@
       "rating": 4,
       "review": "加菲尔德很帅，很适合演一个充满青春气息、聪明又有些叛逆的彼得。他完全可以靠自己的聪明才智成长为蜘蛛侠，电影却执着于赋予他一段复杂的家族背景。我不太喜欢这种设定。",
       "doubanId": "2129132",
-      "releaseYear": 2012,
-      "poster": "posters/超凡蜘蛛侠.jpg"
+      "releaseYear": 2012
     },
     {
       "title": "蜘蛛侠3",
@@ -112,8 +95,7 @@
       "rating": 3,
       "review": "大杂烩全塞到一块了，哎。",
       "doubanId": "1418189",
-      "releaseYear": 2007,
-      "poster": "posters/蜘蛛侠3（托比马奎尔版）.jpg"
+      "releaseYear": 2007
     },
     {
       "title": "蜘蛛侠2",
@@ -121,8 +103,7 @@
       "rating": 5,
       "review": "是我记忆中的蜘蛛侠",
       "doubanId": "1308570",
-      "releaseYear": 2004,
-      "poster": "posters/蜘蛛侠2（托比马奎尔版）.jpg"
+      "releaseYear": 2004
     },
     {
       "title": "蜘蛛侠",
@@ -130,8 +111,7 @@
       "rating": 5,
       "review": "是我记忆中的蜘蛛侠",
       "doubanId": "1306612",
-      "releaseYear": 2002,
-      "poster": "posters/蜘蛛侠（托比马奎尔版）.jpg"
+      "releaseYear": 2002
     },
     {
       "title": "蜘蛛侠：崭新之日",
@@ -139,8 +119,7 @@
       "rating": 4,
       "review": "看的第一部荷兰弟的蜘蛛侠，还不错。",
       "doubanId": "36246195",
-      "releaseYear": 2026,
-      "poster": "posters/蜘蛛侠：崭新之日.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "杀死比尔：血色全传",
@@ -149,8 +128,7 @@
       "rating": 4,
       "review": "经典，无需多言。四个小时，吃薯条吃得嘴疼。",
       "doubanId": "10756537",
-      "releaseYear": 2025,
-      "poster": "posters/杀死比尔：血色全传.jpg"
+      "releaseYear": 2025
     },
     {
       "title": "奥德赛",
@@ -159,8 +137,7 @@
       "rating": 4,
       "review": "不知道怎么评价，看不太懂。",
       "doubanId": "36808876",
-      "releaseYear": 2026,
-      "poster": "posters/奥德赛.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "功夫女足",
@@ -168,8 +145,7 @@
       "rating": 1,
       "review": "只适合小学生看。",
       "doubanId": "36452545",
-      "releaseYear": 2026,
-      "poster": "posters/功夫女足.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "挽救计划",
@@ -177,8 +153,7 @@
       "rating": 5,
       "review": "温柔，有后劲。也是因为这部片子知道了《Sign of the Times》，很好听。",
       "doubanId": "35010610",
-      "releaseYear": 2026,
-      "poster": "posters/挽救计划.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "痴迷",
@@ -186,8 +161,7 @@
       "rating": 5,
       "review": "哈人，没有鬼也能这么吓人的，哈人。",
       "doubanId": "37450627",
-      "releaseYear": 2026,
-      "poster": "posters/痴迷.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "生化危机：爆发夜",
@@ -195,8 +169,7 @@
       "rating": 4,
       "review": "还不错。",
       "doubanId": "37068446",
-      "releaseYear": 2026,
-      "poster": "posters/生化危机：爆发夜.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "欢迎来龙餐馆",
@@ -204,8 +177,7 @@
       "rating": 5,
       "review": "最后有些刻意，不过也还好。",
       "doubanId": "35811064",
-      "releaseYear": 2026,
-      "poster": "posters/欢迎来龙餐馆.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "今夜，就算这份爱恋从世界上消失",
@@ -213,8 +185,7 @@
       "rating": 3,
       "review": "看完《恋途未卜》之后，女主之一的福本莉子的高分作品，有点狗血，不过也还好，男女主颜值很高。",
       "doubanId": "35772573",
-      "releaseYear": 2022,
-      "poster": "posters/今夜，就算这份爱恋从世界上消失.jpg"
+      "releaseYear": 2022
     },
     {
       "title": "你的名字。",
@@ -222,8 +193,7 @@
       "rating": 5,
       "review": "小时候就想看，直到十年以后才完整看完，是新海诚的风格。",
       "doubanId": "26683290",
-      "releaseYear": 2016,
-      "poster": "posters/你的名字。.jpg"
+      "releaseYear": 2016
     },
     {
       "title": "秒速5厘米",
@@ -232,8 +202,7 @@
       "rating": 4,
       "review": "看的新海诚的第一部，小时候看过一次，当时觉得很悲伤很无力，对唯美的画面留下了极深的印象。今年又重温了一次，还是很悲伤很无力。人活一世，就是不断地错过。",
       "doubanId": "2043546",
-      "releaseYear": 2007,
-      "poster": "posters/秒速5厘米.jpg"
+      "releaseYear": 2007
     },
     {
       "title": "给阿嬷的情书",
@@ -241,8 +210,7 @@
       "rating": 5,
       "review": "非常棒的电影，无需多言。",
       "doubanId": "37116446",
-      "releaseYear": 2026,
-      "poster": "posters/给阿嬷的情书.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "飞驰人生3",
@@ -250,8 +218,7 @@
       "rating": 4,
       "review": "围绕这个主角很难再整出新活了，不过质量还是可以的，这个系列差不多该完结了。",
       "doubanId": "37311135",
-      "releaseYear": 2026,
-      "poster": "posters/飞驰人生3.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "恋如雨止",
@@ -259,8 +226,7 @@
       "rating": 5,
       "review": "乍一看是高中生爱上四十五岁离异带娃大叔的逆天故事，看完其实是二位的双向救赎。女主对大叔的爱实际上是逃避挫折的方式，当她能够坦然面对挫折的时候，自然就不会有这样的爱。雨象征着二人遇到的挫折和困难，当挫折和困难都被战胜，雨就停了，而恋也如雨止。",
       "doubanId": "27191173",
-      "releaseYear": 2018,
-      "poster": "posters/恋如雨止.jpg"
+      "releaseYear": 2018
     },
     {
       "title": "平场之月",
@@ -268,8 +234,7 @@
       "rating": 4,
       "review": "中（老）年人的爱情，更像是互相的陪伴。最后有一种很微妙的幸福与遗憾，幸福在于，原来我思念你的时候，你也正在思念我；遗憾在于，他们直到最后，都没有机会知道这件事。明明是双向的思念，最后却各自成了孤独的等待。",
       "doubanId": "34930810",
-      "releaseYear": 2025,
-      "poster": "posters/平场之月.jpg"
+      "releaseYear": 2025
     },
     {
       "title": "惊蛰无声",
@@ -277,8 +242,7 @@
       "rating": 1,
       "review": "刘诗诗漂亮。",
       "doubanId": "37242440",
-      "releaseYear": 2026,
-      "poster": "posters/惊蛰无声.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "柳烈的音乐专辑",
@@ -287,8 +251,7 @@
       "rating": 4,
       "review": "二十多年前的爱情，两个人反复地相遇、分离，这种离别和遗憾，让我沉浸其中。",
       "doubanId": "30225296",
-      "releaseYear": 2019,
-      "poster": "posters/柳烈的音乐专辑.jpg"
+      "releaseYear": 2019
     },
     {
       "title": "重力小丑",
@@ -297,8 +260,7 @@
       "rating": 5,
       "review": "泉水和春的英文都是spring。温馨但有刀的家庭故事。吉高由里子饰演一个跟踪狂，还挺可爱的，哈哈。",
       "doubanId": "3727653",
-      "releaseYear": 2009,
-      "poster": "posters/重力小丑.jpg"
+      "releaseYear": 2009
     },
     {
       "title": "我的妈耶",
@@ -307,8 +269,7 @@
       "rating": 3,
       "review": "其实我很喜欢马思纯，但年纪确实上来了，别演高中生了。",
       "doubanId": "36217763",
-      "releaseYear": 2026,
-      "poster": "posters/我的妈耶.jpg"
+      "releaseYear": 2026
     },
     {
       "title": "偷窥者",
@@ -317,8 +278,7 @@
       "rating": 3,
       "review": "久仰悉尼妹大名，让GPT推荐了一个她的作品来看。整个故事还是不错的，讨论了隐私以及各种隐私条款格式条款，如果停在摄影展时结束将绝杀，可惜停不得。",
       "doubanId": "34981939",
-      "releaseYear": 2021,
-      "poster": "posters/偷窥者.jpg"
+      "releaseYear": 2021
     },
     {
       "title": "黑皮书",
@@ -327,10 +287,7 @@
       "rating": 5,
       "review": "战争残酷，人性复杂，唉。和《色，戒》题材相近，却更让我难受。女主承受了太多苦难与背叛，一次次反转让人唏嘘。还好经过国内谍战片的洗礼，对这些反转多少有了些承受能力……",
       "doubanId": "1858802",
-      "releaseYear": 2006,
-      "poster": "posters/黑皮书.jpg"
+      "releaseYear": 2006
     }
-  ],
-  "日期格式": "已知具体日期时填 YYYY-MM-DD，只记得月份时填 YYYY-MM，只记得年份时填 YYYY。",
-  "豆瓣链接": "可选。知道豆瓣条目编号时填写 doubanId，否则标题会打开豆瓣搜索。"
+  ]
 }

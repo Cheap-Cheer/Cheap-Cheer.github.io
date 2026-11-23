@@ -1,11 +1,5 @@
 {
-  "填写示例": {
-    "title": "作品名称",
-    "author": "作者",
-    "publishYear": 2000,
-    "date": "2026-11-17",
-    "review": "写下你的感想。"
-  },
+  "$schema": "./schemas/reading.schema.json",
   "records": [
     {
       "title": "海与毒药",
