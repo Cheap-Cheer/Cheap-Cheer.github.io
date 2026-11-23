@@ -380,12 +380,6 @@ button:disabled {
 
 .review-more.is-off { display: none; }
 
-.catalog.movie-grid .review-more.is-off {
-  display: inline-flex;
-  visibility: hidden;
-  pointer-events: none;
-}
-
 .pagination {
   justify-content: center;
   margin-top: 1.6rem;
@@ -603,7 +597,6 @@ button:disabled {
   .catalog.movie-grid { grid-template-columns: 1fr; }
   .catalog.movie-grid .card { grid-template-columns: 5.5rem minmax(0, 1fr); }
   .catalog.movie-grid .review { min-height: 0; }
-  .catalog.movie-grid .review-more.is-off { display: none; }
   .interests { grid-template-columns: 1fr; }
 }
 

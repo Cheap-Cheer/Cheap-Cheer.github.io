@@ -18,12 +18,21 @@ function chevron() {
   return svg;
 }
 
+function lineHeightOf(preview) {
+  const lineHeight = Number.parseFloat(getComputedStyle(preview).lineHeight);
+  return Number.isFinite(lineHeight) && lineHeight > 0 ? lineHeight : 0;
+}
+
 function reviewOverflows(preview) {
   if (!preview.clientWidth) return false;
-  const lineHeight = Number.parseFloat(getComputedStyle(preview).lineHeight);
+  const lineHeight = lineHeightOf(preview);
   if (!lineHeight) return false;
   if (preview.classList.contains("clipped")) return preview.scrollHeight - preview.clientHeight > 1;
   return preview.scrollHeight > lineHeight * 2 + 1;
+}
+
+function inMovieCatalog(preview) {
+  return Boolean(preview.closest(".catalog.movie-grid"));
 }
 
 function appendReview(body, review) {
@@ -46,6 +55,15 @@ function appendReview(body, review) {
   const update = () => {
     if (!preview.isConnected) {
       observer.disconnect();
+      return;
+    }
+    if (inMovieCatalog(preview)) {
+      preview.classList.remove("clipped");
+      button.classList.add("is-off");
+      button.tabIndex = -1;
+      button.setAttribute("aria-hidden", "true");
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "展开感想");
       return;
     }
     const overflow = reviewOverflows(preview);
