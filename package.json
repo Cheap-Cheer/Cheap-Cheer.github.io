@@ -6,6 +6,7 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate.mjs",
     "sync-posters": "node scripts/sync-posters.mjs",
+    "genres": "node scripts/fetch-genres.mjs",
     "preview": "node scripts/build.mjs && node scripts/serve.mjs"
   }
 }

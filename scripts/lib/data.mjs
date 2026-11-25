@@ -93,25 +93,70 @@ export function withPosters(records, index) {
   });
 }
 
-export function mergeArchive(archive, movies, reading) {
+export function withGenres(records, index) {
+  return records.map((record) => {
+    const names = index?.[posterKey(record)];
+    if (!Array.isArray(names)) return record;
+    const genres = names.filter((name) => typeof name === "string" && name.trim() && name.length <= 20);
+    if (!genres.length) return record;
+    return { ...record, genres };
+  });
+}
+
+export function genreWorks(index) {
+  const works = new Map();
+  if (!index) return works;
+  for (const [key, names] of Object.entries(index)) {
+    let parsed;
+    try {
+      parsed = JSON.parse(key);
+    } catch {
+      continue;
+    }
+    if (!Array.isArray(parsed) || typeof parsed[0] !== "string" || !Number.isInteger(parsed[1])) continue;
+    if (!Array.isArray(names)) continue;
+    const genres = names.filter((name) => typeof name === "string" && name.trim() && name.length <= 20);
+    if (!genres.length) continue;
+    const work = `${parsed[0].trim()}\0${parsed[1]}`;
+    if (!works.has(work)) works.set(work, genres);
+  }
+  return works;
+}
+
+export function mergeArchive(archive, movies, reading, genreIndex) {
+  const works = genreWorks(genreIndex);
   const workYear = (record, field) => (
     Number.isInteger(record[field]) ? record[field] : Number(String(record.date).slice(0, 4))
   );
   return {
-    movies: merge(archive.movies, movies.map((record) => ({ title: record.title, year: workYear(record, "releaseYear") }))),
-    books: merge(archive.books, reading.map((record) => ({ title: record.title, year: workYear(record, "publishYear") }))),
+    movies: merge(archive.movies, movies.map((record) => ({
+      title: record.title,
+      year: workYear(record, "releaseYear"),
+      genres: record.genres,
+    })), works),
+    books: merge(archive.books, reading.map((record) => ({
+      title: record.title,
+      year: workYear(record, "publishYear"),
+    }))),
   };
 }
 
-function merge(stored, extra) {
-  const seen = new Set();
+function merge(stored, extra, works) {
+  const seen = new Map();
   const items = [];
   for (const item of [...stored, ...extra]) {
     const title = item.title.trim();
     const key = `${title}\0${item.year}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    items.push({ title, year: item.year });
+    const genres = Array.isArray(item.genres) && item.genres.length ? item.genres : works?.get(key);
+    if (seen.has(key)) {
+      const existing = items[seen.get(key)];
+      if (!existing.genres && genres) existing.genres = genres;
+      continue;
+    }
+    const next = { title, year: item.year };
+    if (genres) next.genres = genres;
+    seen.set(key, items.length);
+    items.push(next);
   }
   return items;
 }

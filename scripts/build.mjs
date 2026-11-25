@@ -1,6 +1,6 @@
 import { access, cp, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { byNewest, loadJournal, mergeArchive, reportErrors, withPosters } from "./lib/data.mjs";
+import { byNewest, loadJournal, mergeArchive, reportErrors, withGenres, withPosters } from "./lib/data.mjs";
 import { renderPage } from "./lib/layout.mjs";
 import { preloadsFor } from "./lib/modules.mjs";
 
@@ -12,7 +12,11 @@ if (errors.length) {
 }
 
 const posterIndex = JSON.parse(await readFile("movie-posters.json", "utf8"));
-const movieRecords = withPosters([...movies].sort(byNewest), posterIndex);
+const genreIndex = await readFile("movie-genres.json", "utf8").then(JSON.parse).catch((error) => {
+  if (error.code === "ENOENT") return {};
+  throw error;
+});
+const movieRecords = withGenres(withPosters([...movies].sort(byNewest), posterIndex), genreIndex);
 const bookRecords = [...reading].sort(byNewest);
 for (const record of movieRecords) {
   if (!record.poster) continue;
@@ -68,7 +72,7 @@ const pages = [
     page: "archive",
     module: "/js/archive.js",
     fragment: "pages/archive.html",
-    data: mergeArchive(archive, movies, reading),
+    data: mergeArchive(archive, movieRecords, reading, genreIndex),
   },
   {
     out: "about.html",

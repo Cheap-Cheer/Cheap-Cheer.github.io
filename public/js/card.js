@@ -23,12 +23,39 @@ function lineHeightOf(preview) {
   return Number.isFinite(lineHeight) && lineHeight > 0 ? lineHeight : 0;
 }
 
-function reviewOverflows(preview) {
-  if (!preview.clientWidth) return false;
+function expandedHeight(preview) {
+  const probe = preview.cloneNode(true);
+  probe.classList.remove("clipped");
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.pointerEvents = "none";
+  probe.style.display = "block";
+  probe.style.height = "auto";
+  probe.style.margin = "0";
+  probe.style.webkitLineClamp = "unset";
+  probe.style.lineClamp = "unset";
+  probe.style.width = `${preview.clientWidth}px`;
+  preview.parentElement.append(probe);
+  const height = probe.getBoundingClientRect().height;
+  probe.remove();
+  return height;
+}
+
+function reviewLayout(preview) {
   const lineHeight = lineHeightOf(preview);
-  if (!lineHeight) return false;
-  if (preview.classList.contains("clipped")) return preview.scrollHeight - preview.clientHeight > 1;
-  return preview.scrollHeight > lineHeight * 2 + 1;
+  if (!preview.clientWidth || !lineHeight) return { clip: false, lines: 2 };
+  const full = expandedHeight(preview);
+  const cover = preview.closest(".card")?.querySelector(".cover");
+  if (!cover) return { clip: full > lineHeight * 2 + 1, lines: 2 };
+  const room = cover.getBoundingClientRect().bottom - preview.getBoundingClientRect().top;
+  if (full <= room + 1) return { clip: false, lines: 2 };
+  const lines = Math.max(2, Math.floor(room / lineHeight));
+  return { clip: full > lines * lineHeight + 1, lines };
+}
+
+function setClamp(preview, lines) {
+  preview.style.webkitLineClamp = lines ? String(lines) : "";
+  preview.style.lineClamp = lines ? String(lines) : "";
 }
 
 function inMovieCatalog(preview) {
@@ -48,7 +75,7 @@ function appendReview(body, review) {
     const open = button.getAttribute("aria-expanded") !== "true";
     button.setAttribute("aria-expanded", String(open));
     button.setAttribute("aria-label", open ? "收起感想" : "展开感想");
-    preview.classList.toggle("clipped", !open);
+    update();
   });
   body.append(preview, button);
 
@@ -59,6 +86,7 @@ function appendReview(body, review) {
     }
     if (inMovieCatalog(preview)) {
       preview.classList.remove("clipped");
+      setClamp(preview, 0);
       button.classList.add("is-off");
       button.tabIndex = -1;
       button.setAttribute("aria-hidden", "true");
@@ -66,10 +94,11 @@ function appendReview(body, review) {
       button.setAttribute("aria-label", "展开感想");
       return;
     }
-    const overflow = reviewOverflows(preview);
+    const { clip, lines } = reviewLayout(preview);
     const open = button.getAttribute("aria-expanded") === "true";
-    if (!overflow) {
+    if (!clip) {
       preview.classList.remove("clipped");
+      setClamp(preview, 0);
       button.classList.add("is-off");
       button.tabIndex = -1;
       button.setAttribute("aria-hidden", "true");
@@ -81,9 +110,12 @@ function appendReview(body, review) {
     button.tabIndex = 0;
     button.removeAttribute("aria-hidden");
     preview.classList.toggle("clipped", !open);
+    setClamp(preview, open ? 0 : lines);
   };
   const observer = new ResizeObserver(update);
   observer.observe(preview);
+  const card = preview.closest(".card");
+  if (card) observer.observe(card);
 }
 
 function appendPoster(article, record) {
@@ -109,9 +141,20 @@ export function createCard(record, kind, headingLevel = 2) {
   const heading = element(headingLevel === 3 ? "h3" : "h2");
   const link = element("a", "", record.title);
   link.href = doubanLink(record, kind);
-  heading.append(link);
   const workYear = kind === "movie" ? record.releaseYear : record.publishYear;
-  if (Number.isInteger(workYear)) heading.append(" ", element("span", "year", String(workYear)));
+  const year = Number.isInteger(workYear) ? element("span", "year", String(workYear)) : null;
+  if (kind === "movie") {
+    const name = element("span", "work-name");
+    name.append(link);
+    if (Array.isArray(record.genres) && record.genres.length) {
+      name.append(element("span", "genres", record.genres.join(" / ")));
+    }
+    heading.append(name);
+    if (year) heading.append(year);
+  } else {
+    heading.append(link);
+    if (year) heading.append(" ", year);
+  }
 
   const date = element(record.date.length > 4 ? "time" : "span", "date", record.date);
   if (date.tagName === "TIME") date.dateTime = record.date;
@@ -121,12 +164,15 @@ export function createCard(record, kind, headingLevel = 2) {
   if (kind === "book" && typeof record.author === "string" && record.author.trim()) {
     body.append(element("p", "author", record.author.trim()));
   }
-  body.append(date);
   if (kind === "movie") {
     const stars = element("span", "stars", "★".repeat(record.rating) + "☆".repeat(5 - record.rating));
     stars.setAttribute("role", "img");
     stars.setAttribute("aria-label", `评分 ${record.rating} 分，满分 5 分`);
-    body.append(stars);
+    const meta = element("div", "meta");
+    meta.append(stars, date);
+    body.append(meta);
+  } else {
+    body.append(date);
   }
   appendReview(body, record.review);
   article.append(body);

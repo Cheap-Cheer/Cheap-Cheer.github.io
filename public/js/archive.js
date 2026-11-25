@@ -22,11 +22,96 @@ function decadeOf(year) {
 function groupByYear(items) {
   const groups = new Map();
   for (const item of items) {
-    const titles = groups.get(item.year) || [];
-    titles.push(item.title);
-    groups.set(item.year, titles);
+    const list = groups.get(item.year) || [];
+    list.push(item);
+    groups.set(item.year, list);
   }
   return [...groups.entries()].sort((a, b) => b[0] - a[0]);
+}
+
+function decadeChoices(items) {
+  const counts = new Map();
+  for (const item of items) counts.set(decadeOf(item.year), (counts.get(decadeOf(item.year)) || 0) + 1);
+  return [
+    ["", `全部（${items.length}）`],
+    ...decades.filter(([key]) => counts.has(key)).map(([key, label]) => [key, `${label}（${counts.get(key)}）`]),
+  ];
+}
+
+function genreChoices(items) {
+  const counts = new Map();
+  for (const item of items) {
+    for (const name of item.genres ?? []) counts.set(name, (counts.get(name) || 0) + 1);
+  }
+  const names = [...counts.keys()].sort((a, b) => counts.get(b) - counts.get(a) || a.localeCompare(b, "zh"));
+  return [
+    ["", `全部（${items.length}）`],
+    ...names.map((name) => [name, `${name}（${counts.get(name)}）`]),
+  ];
+}
+
+function buildPicker(name, onPick) {
+  let current = "";
+  const field = element("div", "picker-field");
+  const caption = element("span", "", name);
+  caption.addEventListener("click", () => button.click());
+  field.append(caption, " ");
+  const picker = element("span", "picker");
+  const button = element("button", "picker-button");
+  button.type = "button";
+  button.setAttribute("aria-haspopup", "listbox");
+  button.setAttribute("aria-expanded", "false");
+  const menu = element("div", "picker-menu");
+  menu.setAttribute("role", "listbox");
+  menu.hidden = true;
+  picker.append(button, menu);
+  field.append(picker);
+
+  const close = () => {
+    menu.hidden = true;
+    button.setAttribute("aria-expanded", "false");
+  };
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const willOpen = menu.hidden;
+    for (const other of document.querySelectorAll(".picker-menu")) {
+      if (other === menu) continue;
+      other.hidden = true;
+      other.previousElementSibling?.setAttribute("aria-expanded", "false");
+    }
+    menu.hidden = !willOpen;
+    button.setAttribute("aria-expanded", String(willOpen));
+  });
+  document.addEventListener("click", (event) => {
+    if (!field.contains(event.target)) close();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") close();
+  });
+
+  return {
+    field,
+    get value() { return current; },
+    fill(options, selected) {
+      current = selected;
+      const chosen = options.find(([value]) => value === selected) ?? options[0];
+      button.textContent = chosen?.[1] ?? "";
+      menu.replaceChildren(...options.map(([value, text]) => {
+        const option = element("button", "", text);
+        option.type = "button";
+        option.setAttribute("role", "option");
+        option.setAttribute("aria-selected", String(value === selected));
+        option.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          close();
+          if (value !== current) onPick(value);
+        });
+        return option;
+      }));
+    },
+  };
 }
 
 function renderGroups(groups) {
@@ -38,7 +123,12 @@ function renderGroups(groups) {
     time.dateTime = String(year);
     heading.append(time);
     const names = element("ul");
-    for (const title of titles) names.append(element("li", "", title));
+    for (const item of titles) {
+      const row = element("li");
+      row.append(item.title);
+      if (item.genres?.length) row.append(element("span", "genres", item.genres.join(" / ")));
+      names.append(row);
+    }
     group.append(heading, names);
     list.append(group);
   }
@@ -68,25 +158,25 @@ function renderMovies(items) {
   const count = element("p", "count");
   head.append(element("h2", "", "电影"), count);
 
-  const present = new Map();
-  for (const item of items) present.set(decadeOf(item.year), (present.get(decadeOf(item.year)) || 0) + 1);
   const filters = element("div", "filters");
   filters.setAttribute("role", "group");
-  filters.setAttribute("aria-label", "按年代筛选");
-  const buttons = new Map();
+  filters.setAttribute("aria-label", "筛选");
   let selected = "";
+  let genre = "";
   let current = 1;
-  for (const [key, label] of [["", "全部"], ...decades.filter(([key]) => present.has(key))]) {
-    const total = key ? present.get(key) : items.length;
-    const button = element("button", "", `${label}（${total}）`);
-    button.addEventListener("click", () => {
-      selected = key;
+  const decadePicker = buildPicker("年代", (value) => {
+    selected = value;
+    current = 1;
+    draw();
+  });
+  const genrePicker = items.some((item) => item.genres?.length)
+    ? buildPicker("类型", (value) => {
+      genre = value;
       current = 1;
       draw();
-    });
-    filters.append(button);
-    buttons.set(key, button);
-  }
+    })
+    : null;
+  filters.append(decadePicker.field, ...(genrePicker ? [genrePicker.field] : []));
 
   const listHost = element("div");
   const pagination = element("nav", "pagination");
@@ -115,13 +205,22 @@ function renderMovies(items) {
   }
 
   function draw() {
-    const visible = selected ? items.filter((item) => decadeOf(item.year) === selected) : items;
+    let genreItems = items.filter((item) => !genre || item.genres?.includes(genre));
+    if (selected && !genreItems.some((item) => decadeOf(item.year) === selected)) selected = "";
+    const decadeItems = items.filter((item) => !selected || decadeOf(item.year) === selected);
+    if (genre && !decadeItems.some((item) => item.genres?.includes(genre))) {
+      genre = "";
+      genreItems = items;
+    }
+    decadePicker.fill(decadeChoices(genreItems), selected);
+    genrePicker?.fill(genreChoices(decadeItems), genre);
+    const visible = decadeItems.filter((item) => !genre || item.genres?.includes(genre));
     const pages = paginate(groupByYear(visible));
     if (current > pages.length) current = 1;
     count.replaceChildren(element("strong", "", String(visible.length)), " 部电影");
-    for (const [key, button] of buttons) button.setAttribute("aria-pressed", String(key === selected));
     const groups = pages[current - 1] ?? [];
-    listHost.replaceChildren(groups.length ? renderGroups(groups) : element("p", "empty", "还没有记录。"));
+    const empty = items.length && (selected || genre) ? "没有符合条件的电影。" : "还没有记录。";
+    listHost.replaceChildren(groups.length ? renderGroups(groups) : element("p", "empty", empty));
     fillPagination(pages.length);
   }
 

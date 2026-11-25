@@ -99,6 +99,26 @@ function ratingChoices(records) {
   ];
 }
 
+function genreChoices(records) {
+  const counts = new Map();
+  for (const record of records) {
+    for (const name of record.genres ?? []) counts.set(name, (counts.get(name) || 0) + 1);
+  }
+  const names = [...counts.keys()].sort((a, b) => counts.get(b) - counts.get(a) || a.localeCompare(b, "zh"));
+  return [
+    ["", `全部（${records.length}）`],
+    ...names.map((name) => [name, `${name}（${counts.get(name)}）`]),
+  ];
+}
+
+function matching(records, { year = "", rating = "", genre = "" } = {}) {
+  return records.filter((record) => (
+    (!year || record.date.startsWith(year))
+    && (!rating || record.rating === Number(rating))
+    && (!genre || record.genres?.includes(genre))
+  ));
+}
+
 function buildYearFilters(records, onPick) {
   const filters = element("div", "filters");
   filters.setAttribute("role", "group");
@@ -150,11 +170,8 @@ function placeCards(grid, cards, split) {
   grid.replaceChildren(...columns);
 }
 
-function visibleRecords(records, year, rating, sortValue) {
-  const selected = records.filter((record) => (
-    (!year || record.date.startsWith(year))
-    && (!rating || record.rating === Number(rating))
-  ));
+function visibleRecords(records, year, rating, genre, sortValue) {
+  const selected = matching(records, { year, rating, genre });
   if (sortValue === "rating") selected.sort((a, b) => b.rating - a.rating || byNewest(a, b));
   if (sortValue === "old") selected.reverse();
   return selected;
@@ -164,6 +181,7 @@ function renderCatalog(root, key, records) {
   const view = views[key];
   let year = "";
   let rating = "";
+  let genre = "";
   let current = 1;
 
   const count = element("span", "count");
@@ -186,6 +204,13 @@ function renderCatalog(root, key, records) {
     current = 1;
     draw();
   }) : null;
+  const genrePicker = key === "movies" && records.some((record) => record.genres?.length)
+    ? buildPicker("类型", (value) => {
+      genre = value;
+      current = 1;
+      draw();
+    })
+    : null;
   const { filters, buttons } = yearPicker ? { filters: null, buttons: new Map() } : buildYearFilters(records, (nextYear) => {
     year = nextYear;
     current = 1;
@@ -198,7 +223,9 @@ function renderCatalog(root, key, records) {
   const controls = element("div", "controls");
   if (yearPicker) {
     const picks = element("div", "filters");
-    picks.append(yearPicker.field, ratingPicker.field);
+    picks.setAttribute("role", "group");
+    picks.setAttribute("aria-label", "筛选");
+    picks.append(yearPicker.field, ratingPicker.field, ...(genrePicker ? [genrePicker.field] : []));
     controls.append(picks);
   }
   controls.append(...[filters, sort.field].filter(Boolean));
@@ -213,12 +240,11 @@ function renderCatalog(root, key, records) {
 
   function draw() {
     if (yearPicker) {
-      const rated = rating ? records.filter((record) => record.rating === Number(rating)) : records;
-      const dated = year ? records.filter((record) => record.date.startsWith(year)) : records;
-      yearPicker.fill(yearChoices(rated), year);
-      ratingPicker.fill(ratingChoices(dated), rating);
+      yearPicker.fill(yearChoices(matching(records, { rating, genre })), year);
+      ratingPicker.fill(ratingChoices(matching(records, { year, genre })), rating);
+      genrePicker?.fill(genreChoices(matching(records, { year, rating })), genre);
     }
-    const selected = visibleRecords(records, year, rating, sort.value);
+    const selected = visibleRecords(records, year, rating, genre, sort.value);
     count.replaceChildren(element("strong", "", String(selected.length)), ` ${view.unit}`);
     for (const [filter, button] of buttons) {
       button.setAttribute("aria-pressed", String(filter === year));
@@ -226,9 +252,12 @@ function renderCatalog(root, key, records) {
 
     const start = (current - 1) * view.size;
     const visible = selected.slice(start, start + view.size);
+    const empty = records.length && (year || rating || genre)
+      ? `没有符合条件的${view.kind === "book" ? "书" : "电影"}。`
+      : view.empty;
     const cards = visible.length
       ? visible.map((record) => createCard(record, view.kind))
-      : [element("p", "empty", view.empty)];
+      : [element("p", "empty", empty)];
     placeCards(grid, cards, key === "movies" && !narrowMovies.matches);
 
     const pageCount = Math.ceil(selected.length / view.size);

@@ -213,7 +213,8 @@ h1 {
 .count,
 .date,
 .year,
-.author { color: var(--muted); }
+.author,
+.genres { color: var(--muted); }
 
 .count strong {
   color: var(--ink);
@@ -331,6 +332,8 @@ button:disabled {
 
 .catalog.movie-grid .card { grid-template-columns: clamp(5.2rem, 28%, 9.5rem) minmax(0, 1fr); }
 
+.catalog.movie-grid .card:not(.text-only) { grid-template-columns: clamp(5.2rem, 28%, 9.5rem) minmax(0, 1fr); }
+
 .catalog.movie-grid .review { min-height: 3.1em; }
 
 .card.text-only,
@@ -365,20 +368,61 @@ button:disabled {
   font-weight: 600;
 }
 
+.card.movie h2,
+.card.movie h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.work-name {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.5rem;
+  row-gap: 0.05rem;
+}
+
+.card.movie .year {
+  margin-left: auto;
+  flex: none;
+}
+
+.card.movie .genres { margin-top: 0; }
+
 .home .card h2,
 .home .card h3 { font-size: 1.25rem; }
 
 .year,
 .date,
-.author {
+.author,
+.genres {
   font-size: 0.84rem;
   font-weight: 400;
 }
 
 .date,
-.author { margin-top: 0.3rem; }
+.author,
+.genres { margin-top: 0.3rem; }
 
 .date { display: block; }
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.55rem;
+  margin-top: 0.3rem;
+}
+
+.meta .date,
+.meta .stars {
+  margin-top: 0;
+  flex: none;
+}
+
+.meta .date { white-space: nowrap; }
 
 .stars {
   display: block;
@@ -602,10 +646,16 @@ button:disabled {
 }
 
 .year-group li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.45rem;
   padding: 0.22rem 0;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
+.year-group .genres { margin-top: 0; }
 
 .empty {
   color: var(--muted);
@@ -650,7 +700,7 @@ button:disabled {
   nav { column-gap: 0.7rem; }
   nav a { padding: 0.55rem 0; }
   .catalog.movie-grid { grid-template-columns: 1fr; }
-  .catalog.movie-grid .card { grid-template-columns: 5.5rem minmax(0, 1fr); }
+  .catalog.movie-grid .card:not(.text-only) { grid-template-columns: 5.5rem minmax(0, 1fr); }
   .catalog.movie-grid .review { min-height: 0; }
   .interests { grid-template-columns: 1fr; }
 }
