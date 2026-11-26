@@ -58,8 +58,14 @@ function setClamp(preview, lines) {
   preview.style.lineClamp = lines ? String(lines) : "";
 }
 
+const narrowMovies = window.matchMedia("(max-width: 31rem)");
+
 function inMovieCatalog(preview) {
   return Boolean(preview.closest(".catalog.movie-grid"));
+}
+
+function showFullMovieReview(preview) {
+  return inMovieCatalog(preview) && !narrowMovies.matches;
 }
 
 function appendReview(body, review) {
@@ -77,14 +83,16 @@ function appendReview(body, review) {
     button.setAttribute("aria-label", open ? "收起感想" : "展开感想");
     update();
   });
-  body.append(preview, button);
+  const row = element("div", "review-row");
+  row.append(preview, button);
+  body.append(row);
 
   const update = () => {
     if (!preview.isConnected) {
       observer.disconnect();
       return;
     }
-    if (inMovieCatalog(preview)) {
+    if (showFullMovieReview(preview)) {
       preview.classList.remove("clipped");
       setClamp(preview, 0);
       button.classList.add("is-off");
