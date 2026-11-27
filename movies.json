@@ -315,6 +315,15 @@
       "review": "这种电影至少需要看两遍，确实精彩。",
       "doubanId": "25977027",
       "releaseYear": 2016
+    },
+    {
+      "title": "暖暖内含光",
+      "tmdbId": 38,
+      "date": "2026-11-28",
+      "rating": 5,
+      "review": "看哭了。",
+      "doubanId": "1308777",
+      "releaseYear": 2004
     }
   ]
 }
